@@ -1,0 +1,10 @@
+
+<div class="jumbotron text-center" ng-controller="userController">
+  <h1>Usuarios</h1>
+  <p>{{ message }}</p>
+  <section ng-controller="getAllUsers" class="container-fluid">
+				<p ng-repeat="p in users">
+						{{p.id + " " + p.firstname + " " + p.lastname}}
+				</p>
+  </section>
+</div>

@@ -1,0 +1,36 @@
+{
+    "menu": {
+        "opciones": [
+            {
+                "id": "1",
+                "text": "Tesorería",
+                "url": "#",
+                "subopciones": [
+                  {
+                    "text": "Tipos de Avance",
+                    "url": "#/listarTiposAvance"
+                  },
+                  {
+                    "text": "Tipos Requisitos",
+                    "url": "#/listarRequisitos"
+                  }
+                ]
+            },
+            {
+              "id": "2",
+              "text": "Opciones",
+                "url": "#",
+                "subopciones": [
+                  {
+                    "text": "inicio",
+                    "url": "#/home"
+                  },
+                  {
+                    "text": "Acerca de",
+                    "url": "#/about"
+                  }
+                ]
+            }
+        ]
+    }
+}

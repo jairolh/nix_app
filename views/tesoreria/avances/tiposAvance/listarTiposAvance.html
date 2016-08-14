@@ -1,0 +1,37 @@
+<div class="jumbotron text-center">
+  <h2>{{ title }}</h2>
+  <div class="form-group">
+      <p align="center"> {{ message }} </p>
+      <p align="center"> <button onclick="window.location.href='#/agregarTiposAvance'" class="btn btn-info">NUEVO TIPO</button></p>
+  </div>
+
+  <div class="contenedor" data-ng-show="viewState === possibleStates[0]">
+  <table id="tipoAvance" class="table datatable table-striped table-bordered ">
+    <thead>
+      <tr>
+        <th>Referencia</th>
+        <th>Nombre</th>
+        <th>Descripcion</th>
+        <th>Estado</th>
+        <th>FechaRegistro</th>
+        <th colspan="2" align="center">Opciones</th>
+      </tr>
+    </thead>
+    <tbody >
+      <tr ng-repeat="d in data" >
+        <td>{{d.Referencia}}</td>
+        <td>{{d.Nombre}}</td>
+        <td>{{d.Descripcion}}</td>
+        <td>{{d.Estado}}</td>
+        <td>{{d.FechaRegistro}}</td>
+        <td><a id="requisito" href="#/listarRequisitosAvance/{{d.IdTipo}}" >Requisitos</a></td></td>
+        <td><a id="editar" href="#/editarTiposAvance/" ng-click="selectId(d.IdTipo)" >Editar</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+ </div>  
+</div>
+
+
+
