@@ -14,6 +14,7 @@ nixApp.config(function($routeProvider) {
         .when('/listarRequisitosAvance/:tipoId',        {templateUrl : 'views/tesoreria/avances/requisitosTipoAvance/listarRequisitosAvance.html', controller  : 'RequisitoAvanceController'})
         .when('/agregarRequisitoAvance',                {templateUrl : 'views/tesoreria/avances/requisitosTipoAvance/agregarRequisitoAvance.html', controller  : 'addRequisitoAvanceController'})
         .when('/editarRequisitoAvance/:tipoId/:reqId',  {templateUrl : 'views/tesoreria/avances/requisitosTipoAvance/editarRequisitoAvance.html',  controller  : 'updRequisitoAvanceController'})
+        .when('/listarSolicitudAvance',       {templateUrl : 'views/tesoreria/avances/solicitudAvance/listarSolicitudAvance.html', controller  : 'SolicitudAvanceController'})
         .when('/about',              {templateUrl : 'views/about.html',controller  : 'aboutController'  })
         .when('/home',               {templateUrl : 'views/home.html',  controller  : 'homeController' })
         .otherwise({redirectTo: '/home' });

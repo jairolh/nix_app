@@ -1,0 +1,72 @@
+<div class="jumbotron text-center">
+  <h2>{{ title }}</h2>
+  <div class="form-group">
+      <p align="center"> {{ message }} </p>
+      <!--p align="center"> <button onclick="window.location.href='#/agregarTiposAvance'" class="btn btn-info">NUEVO TIPO</button></p-->
+  </div>
+<div ng-controller="SolicitudAvanceController">
+  <div class="contenedor" data-ng-show="viewState === possibleStates[0]">
+   <table id="solicitudAvance" class="table datatable table-striped table-bordered ">
+    <thead>
+      <tr>
+        <th>Vigencia</th>
+        <th>Consecutivo</th>
+        <th>Objetivo</th>
+        <th>Justificacion</th>
+        <th>Valor Total</th>
+        <th>Dependencia</th>
+        <th>Facultad</th>
+        <th>Proyecto Curricular</th>
+        <th>Convenio</th>
+        <th>Proyecto Investigacion</th>
+        <th>Fecha Registro</th>
+        <th colspan="2">Beneficiario</th>
+        <th colspan="2">Datos Contacto</th>
+        <th>Estado Actual</th>
+        <th align="center">Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="sav in data">
+        
+        <td>{{sav.Vigencia}}</td>
+        <td>{{sav.Consecutivo}}</td>
+        <td>{{sav.Objetivo}}</td>
+        <td>{{sav.Justificacion}}</td>
+        <td>{{sav.ValorTotal}}</td>
+        <td>{{sav.Dependencia}}</td>
+        <td>{{sav.Facultad}}</td>
+        <td>{{sav.ProyectoCurricular}}</td>
+        <td>{{sav.Convenio}}</td>
+        <td>{{sav.ProyectoInv}}</td>
+        <td>{{sav.FechaRegistro}}</td>
+        <td>{{sav.Documento}}</td>
+        <td>{{sav.Nombre}} {{sav.Apellido}}</td>
+        <td>{{sav.Correo}}</td>
+        <td>{{sav.Celular}}</td>
+        <td>{{sav.EstadoActual}}</td>
+
+        <td><a id="IdTipo" href="#/editarRequisitoAvance/{{ra.IdTipo}}/{{ra.IdReq}}">Editar</a></td>
+        <!--td><a id="IdTipo" href="" ng-click="deleteTipo(d.IdTipo)" onclick="return confirm('¿Esta seguro de Borrar el registro?');" >Borrar</a></td></td-->
+      </tr>
+    </tbody>
+  </table>
+  </div>
+    <script>
+  $(document).ready(function() {
+    $('#solicitudAvance').DataTable( {
+        columnDefs: [ {
+            targets: [ 0 ],
+            orderData: [ 0, 1 ]
+        }, {
+            targets: [ 1 ],
+            orderData: [ 1, 0 ]
+        }]
+    } );
+  } );
+  </script>
+</div>
+</div>
+
+
+
