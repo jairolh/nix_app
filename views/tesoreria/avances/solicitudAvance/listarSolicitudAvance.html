@@ -2,9 +2,8 @@
   <h2>{{ title }}</h2>
   <div class="form-group">
       <p align="center"> {{ message }} </p>
-      <!--p align="center"> <button onclick="window.location.href='#/agregarTiposAvance'" class="btn btn-info">NUEVO TIPO</button></p-->
+      <p align="center"> <button onclick="window.location.href='#/agregarSolicitudAvance'" class="btn btn-info">NUEVA SOLICITUD</button></p>
   </div>
-<div ng-controller="SolicitudAvanceController">
   <div class="contenedor" data-ng-show="viewState === possibleStates[0]">
    <table id="solicitudAvance" class="table datatable table-striped table-bordered ">
     <thead>
@@ -51,22 +50,7 @@
       </tr>
     </tbody>
   </table>
-  </div>
-    <script>
-  $(document).ready(function() {
-    $('#solicitudAvance').DataTable( {
-        columnDefs: [ {
-            targets: [ 0 ],
-            orderData: [ 0, 1 ]
-        }, {
-            targets: [ 1 ],
-            orderData: [ 1, 0 ]
-        }]
-    } );
-  } );
-  </script>
-</div>
-</div>
+ </div>
 
 
 

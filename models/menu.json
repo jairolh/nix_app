@@ -7,7 +7,7 @@
                 "url": "#",
                 "subopciones": [
                   {
-                    "text": "Solicitudes Avances",
+                    "text": "Solicitudes Avance",
                     "url": "#/listarSolicitudAvance"
                   },
                   {
