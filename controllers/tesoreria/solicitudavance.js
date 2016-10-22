@@ -17,14 +17,14 @@ nixApp.controller('SolicitudAvanceController', function($scope, $http, $routePar
   $scope.message = 'Listado de Solicitudes de Avance';
  
 //busca datos del tipo de avance
- $http.get(hostSolicitudAvance+'/solicitud/'+vigencia)
+ $http.get(hostSolicitudAvance+'/lista/'+vigencia)
   .then(function(response) {
      //alert(JSON.stringify(response))
       $scope.data = response.data;
   });
 
 });
-
+/*******Funcion registrar solicitud********/
 nixApp.controller('addSolicitudAvanceController', function($scope, $http,$filter) {
   $scope.title = 'Solicitud de Avance';
   $scope.message = 'Registrar Solicitud de Avance';
@@ -149,7 +149,76 @@ $http.get(hostTipoAvance)
             .then(function(info) {
               alert("Se registró La solicitud")});
           $scope.solicitudAvance  = {};
-          window.location = "#/listarSolicitudAvance";
+          window.location = "#/consultarSolicitudAvance/"+vigencia+"/"+data.Solicitud.Consecutivo;
     });
   };
+});
+
+/*Funcion consultar solicitud*/
+nixApp.controller('selSolicitudAvanceController', function($scope, $http, $routeParams) {
+  
+  $scope.title = 'Solicitud de Avance';
+  $scope.message = 'Consulta';
+  
+  idsolicitud=$routeParams.IdSol;
+  vigencia=$routeParams.vig;
+  
+ /******busca datos de solicitud y asigna al array principal el tipo de avance*******/
+ $http.get(hostSolicitudAvance+'/solicitud/'+vigencia+'/'+idsolicitud+'/0')
+  .then(function(response) {
+     //alert(JSON.stringify(response))
+     //alert(response.data[0].Vigencia);
+
+    $scope.solicitudAvance= {Solicitud:   { Vigencia: response.data[0].Vigencia,
+                                            Consecutivo: response.data[0].Consecutivo,
+                                            Objetivo: response.data[0].Objetivo,
+                                            Justificacion: response.data[0].Justificacion,
+                                            ValorTotal: response.data[0].ValorTotal,
+                                            CodigoDependencia: response.data[0].CodigoDependencia,
+                                            Dependencia: response.data[0].Dependencia,
+                                            CodigoFacultad: response.data[0].CodigoFacultad,
+                                            Facultad: response.data[0].Facultad,
+                                            CodigoProyectoCur: response.data[0].CodigoProyectoCur,
+                                            ProyectoCurricular: response.data[0].ProyectoCur,
+                                            CodigoConvenio: response.data[0].CodigoConvenio,
+                                            Convenio: response.data[0].Convenio,
+                                            CodigoProyectoInv: response.data[0].CodigoProyectoInv,
+                                            ProyectoInv: response.data[0].ProyectoInv,
+                                            Estado: response.data[0].Estado},
+                             Beneficiario: { 
+                                            IdBeneficiario: response.data[0].IdBeneficiario,
+                                            Nombre: response.data[0].Nombre,
+                                            Apellido: response.data[0].Apellido,
+                                            TipoDocumento: response.data[0].TipoDocumento,
+                                            Documento: response.data[0].Documento,
+                                            LugarDocumento: response.data[0].LugarDocumento,
+                                            Direccion: response.data[0].Direccion,
+                                            Correo: response.data[0].Correo,
+                                            Telefono: response.data[0].Telefono,
+                                            Celular: response.data[0].Celular
+                                           } ,
+                            };
+    /******busca datos y asigna al array principal el tipo de avance*******/
+     var idsolicitud=response.data[0].IdSolicitud; 
+     $http.get(hostSolicitudAvance+'/tiposAvance/'+vigencia+'/'+idsolicitud+'/0')
+      .then(function(responseTipo) {
+         //alert(JSON.stringify(responseTipo))
+          /*Variable auxiliar ayuda a la asignacion al array*/
+          var aux=0;
+          $scope.solicitudAvance.TipoAvance=responseTipo.data;
+           /******busca datos de requisitos y asigna al array principal el tipo de avance*******/
+          angular.forEach($scope.solicitudAvance.TipoAvance, function(tipoAvance, aux) {
+              var idtipo=tipoAvance.IdTipo; 
+              $scope.solicitudAvance.TipoAvance[aux].Requisitos=[];
+              $http.get(hostSolicitudAvance+'/requisitosTiposAvance/'+vigencia+'/'+idsolicitud+'/'+idtipo)
+                  .then(function(responseReq) {
+                     //alert(aux+JSON.stringify(responseReq))
+                     $scope.solicitudAvance.TipoAvance[aux].Requisitos=responseReq.data;
+                     aux++;
+                  });    
+                  
+            });
+      });                        
+  });
+
 });

@@ -32,7 +32,7 @@
         <td>{{sav.Consecutivo}}</td>
         <td>{{sav.Objetivo}}</td>
         <td>{{sav.Justificacion}}</td>
-        <td>{{sav.ValorTotal}}</td>
+        <td>{{sav.ValorTotal | currency }}</td>
         <td>{{sav.Dependencia}}</td>
         <td>{{sav.Facultad}}</td>
         <td>{{sav.ProyectoCurricular}}</td>
@@ -45,7 +45,7 @@
         <td>{{sav.Celular}}</td>
         <td>{{sav.EstadoActual}}</td>
 
-        <td><a id="IdTipo" href="#/editarRequisitoAvance/{{ra.IdTipo}}/{{ra.IdReq}}">Editar</a></td>
+        <td><a id="IdTipo" href="#/consultarSolicitudAvance/{{sav.Vigencia}}/{{sav.Consecutivo}}">Consultar</a></td>
         <!--td><a id="IdTipo" href="" ng-click="deleteTipo(d.IdTipo)" onclick="return confirm('¿Esta seguro de Borrar el registro?');" >Borrar</a></td></td-->
       </tr>
     </tbody>

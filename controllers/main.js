@@ -14,8 +14,9 @@ nixApp.config(function($routeProvider) {
         .when('/listarRequisitosAvance/:tipoId',        {templateUrl : 'views/tesoreria/avances/requisitosTipoAvance/listarRequisitosAvance.html', controller  : 'RequisitoAvanceController'})
         .when('/agregarRequisitoAvance',                {templateUrl : 'views/tesoreria/avances/requisitosTipoAvance/agregarRequisitoAvance.html', controller  : 'addRequisitoAvanceController'})
         .when('/editarRequisitoAvance/:tipoId/:reqId',  {templateUrl : 'views/tesoreria/avances/requisitosTipoAvance/editarRequisitoAvance.html',  controller  : 'updRequisitoAvanceController'})
-        .when('/listarSolicitudAvance',       {templateUrl : 'views/tesoreria/avances/solicitudAvance/listarSolicitudAvance.html',  controller  : 'SolicitudAvanceController'})
-        .when('/agregarSolicitudAvance',      {templateUrl : 'views/tesoreria/avances/solicitudAvance/agregarSolicitudAvance.html', controller : 'addSolicitudAvanceController'})
+        .when('/listarSolicitudAvance',                    {templateUrl : 'views/tesoreria/avances/solicitudAvance/listarSolicitudAvance.html',    controller : 'SolicitudAvanceController'})
+        .when('/agregarSolicitudAvance',                   {templateUrl : 'views/tesoreria/avances/solicitudAvance/agregarSolicitudAvance.html',   controller : 'addSolicitudAvanceController'})
+        .when('/consultarSolicitudAvance/:vig/:IdSol',     {templateUrl : 'views/tesoreria/avances/solicitudAvance/consultarSolicitudAvance.html', controller : 'selSolicitudAvanceController'})
         .when('/about',              {templateUrl : 'views/about.html',controller  : 'aboutController'  })
         .when('/home',               {templateUrl : 'views/home.html',  controller  : 'homeController' })
         .otherwise({redirectTo: '/home' });
