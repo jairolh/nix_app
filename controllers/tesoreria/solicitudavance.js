@@ -144,12 +144,14 @@ $http.get(hostTipoAvance)
                                  },
                   Estadosolicitud  :  {Usuario: $scope.solicitudAvance.Estadosolicitud.Usuario }          
                  };
-          
-          $http.post(hostSolicitudAvance,data)
-            .then(function(info) {
-              alert("Se registró La solicitud")});
+          /*24/10/2016 se adiciona la opcion solicitud, para poder registrar diferentes tipos de registros*/
+          $http.post(hostSolicitudAvance+'/solicitud',data)
+            .success(function(info) {
+              alert("Se registró La solicitud");
+          });
           $scope.solicitudAvance  = {};
-          window.location = "#/consultarSolicitudAvance/"+vigencia+"/"+data.Solicitud.Consecutivo;
+          window.location = "#/consultarSolicitudAvance/"+vigencia+"/"+data.Solicitud.Consecutivo;    
+          
     });
   };
 });
@@ -184,7 +186,7 @@ nixApp.controller('selSolicitudAvanceController', function($scope, $http, $route
                                             Convenio: response.data[0].Convenio,
                                             CodigoProyectoInv: response.data[0].CodigoProyectoInv,
                                             ProyectoInv: response.data[0].ProyectoInv,
-                                            Estado: response.data[0].Estado},
+                                            EstadoActual: response.data[0].EstadoActual},
                              Beneficiario: { 
                                             IdBeneficiario: response.data[0].IdBeneficiario,
                                             Nombre: response.data[0].Nombre,
@@ -220,5 +222,69 @@ nixApp.controller('selSolicitudAvanceController', function($scope, $http, $route
             });
       });                        
   });
+
+});
+
+/*********Funcion consultar solicitud***********/
+nixApp.controller('addTipoSolicitudAvanceController', function($scope, $http, $routeParams,$filter) {
+  
+  $scope.title = 'Solicitud de Avance';
+  $scope.message = 'Registro nuevo tipo de avance';
+  
+  idsolicitud=$routeParams.IdSol;
+  vigencia=$routeParams.vig;
+  
+  $http.get(hostTipoAvance)
+    .then(function(responseTAV) {
+      $scope.tipoAvance=$filter('filter')(responseTAV.data, {"Estado" : "A"});
+      }); 
+
+ /******busca datos de solicitud y asigna al array principal el tipo de avance*******/
+ $http.get(hostSolicitudAvance+'/solicitud/'+vigencia+'/'+idsolicitud+'/0')
+  .then(function(response) {
+     //alert(JSON.stringify(response))
+    $scope.solicitudAvance= {Solicitud:   { Vigencia: response.data[0].Vigencia,
+                                            Consecutivo: response.data[0].Consecutivo,
+                                            Objetivo: response.data[0].Objetivo,
+                                            Justificacion: response.data[0].Justificacion,
+                                            ValorTotal: response.data[0].ValorTotal,
+                                            CodigoDependencia: response.data[0].CodigoDependencia,
+                                            Dependencia: response.data[0].Dependencia,
+                                            CodigoFacultad: response.data[0].CodigoFacultad,
+                                            Facultad: response.data[0].Facultad,
+                                            CodigoProyectoCur: response.data[0].CodigoProyectoCur,
+                                            ProyectoCurricular: response.data[0].ProyectoCur,
+                                            CodigoConvenio: response.data[0].CodigoConvenio,
+                                            Convenio: response.data[0].Convenio,
+                                            CodigoProyectoInv: response.data[0].CodigoProyectoInv,
+                                            ProyectoInv: response.data[0].ProyectoInv,
+                                            EstadoActual: response.data[0].EstadoActual},
+                            };
+    /******busca datos y asigna al array principal el tipo de avance*******/
+     idSolicitud=response.data[0].IdSolicitud; 
+                      
+  });
+
+  $scope.addTipo = function(){
+ // alert(JSON.stringify($scope.solicitudAvance)) //permite ver el arreglo que llega
+      var data = {Solicitud :  {  IdSolicitud:idSolicitud,
+                                  Vigencia: String($scope.solicitudAvance.Solicitud.Vigencia),
+                                  Consecutivo: $scope.solicitudAvance.Solicitud.Consecutivo,
+                                  Objetivo: $scope.solicitudAvance.Solicitud.Objetivo
+                                },
+                  Tipoavance  :  {IdTipo: parseInt($scope.solicitudAvance.Tipoavance.IdTipo),
+                                  Descripcion: $scope.solicitudAvance.Tipoavance.Descripcion,
+                                  Valor: parseFloat($scope.solicitudAvance.Tipoavance.Valor)
+                                 }
+                 };
+      $http.post(hostSolicitudAvance+'/tipoavance',data)
+          .then(function(info) {
+            alert("Se registró el tipo de avance a la solicitud")
+          });
+          $scope.solicitudAvance  = {};
+          window.location = "#/consultarSolicitudAvance/"+vigencia+"/"+data.Solicitud.Consecutivo;
+ 
+  };
+
 
 });
