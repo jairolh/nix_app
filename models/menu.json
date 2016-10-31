@@ -2,14 +2,10 @@
     "menu": {
         "opciones": [
             {
-                "id": "1",
-                "text": "Tesorería",
+                "id": "3",
+                "text": "Admin Tesorería",
                 "url": "#",
                 "subopciones": [
-                  {
-                    "text": "Solicitudes Avance",
-                    "url": "#/listarSolicitudAvance"
-                  },
                   {
                     "text": "Tipos de Avance",
                     "url": "#/listarTiposAvance"
@@ -21,7 +17,26 @@
                 ]
             },
             {
-              "id": "2",
+                "id": "2",
+                "text": "Gestiónar Avance",
+                "url": "#",
+                "subopciones": [
+                  {
+                    "text": "Solicitud Avance",
+                    "url": "#/listarSolicitudAvance"
+                  },
+                  {
+                    "text": "Verificación Avance",
+                    "url": "#/listarVerificarAvance"
+                  },
+                  {
+                    "text": "Validación Avance",
+                    "url": "#/validar"
+                  }
+                ]
+            },
+            {
+              "id": "1",
               "text": "Opciones",
                 "url": "#",
                 "subopciones": [
