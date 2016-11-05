@@ -162,10 +162,10 @@ $http.get(hostTipoAvance)
 });
 
 /*Funcion consultar solicitud*/
-nixApp.controller('selSolicitudAvanceController', function($scope, $http, $routeParams) {
+nixApp.controller('selVerificaSolicitudAvanceController', function($scope, $http, $routeParams, $filter) {
   
-  $scope.title = 'Solicitud de Avance';
-  $scope.message = 'Consulta';
+  $scope.title = 'Verificación Solicitud de Avance';
+  $scope.message = 'Verificar Requisitos';
   
   idsolicitud=$routeParams.IdSol;
   vigencia=$routeParams.vig;
@@ -204,9 +204,11 @@ nixApp.controller('selSolicitudAvanceController', function($scope, $http, $route
                                             Telefono: response.data[0].Telefono,
                                             Celular: response.data[0].Celular
                                            } ,
+                              Estadosolicitud: {Usuario : 'system'},             
                             };
+  
     /******busca datos y asigna al array principal el tipo de avance*******/
-     var idsolicitud=response.data[0].IdSolicitud; 
+     var idsolicitud=parseInt(response.data[0].IdSolicitud); 
      $http.get(hostSolicitudAvance+'/tiposAvance/'+vigencia+'/'+idsolicitud+'/0')
       .then(function(responseTipo) {
          //alert(JSON.stringify(responseTipo))
@@ -215,18 +217,62 @@ nixApp.controller('selSolicitudAvanceController', function($scope, $http, $route
           $scope.solicitudAvance.TipoAvance=responseTipo.data;
            /******busca datos de requisitos y asigna al array principal el tipo de avance*******/
           angular.forEach($scope.solicitudAvance.TipoAvance, function(tipoAvance, aux) {
-              var idtipo=tipoAvance.IdTipo; 
+              var idtipo=parseInt(tipoAvance.IdTipo); 
               $scope.solicitudAvance.TipoAvance[aux].Requisitos=[];
-              $http.get(hostSolicitudAvance+'/requisitosTiposAvance/'+vigencia+'/'+idsolicitud+'/'+idtipo)
+              $http.get(hostSolicitudAvance+'/requisitosSolicitudAvance/'+vigencia+'/'+idsolicitud+'/'+idtipo)
                   .then(function(responseReq) {
                      //alert(aux+JSON.stringify(responseReq))
-                     $scope.solicitudAvance.TipoAvance[aux].Requisitos=responseReq.data;
+                     $scope.solicitudAvance.TipoAvance[aux].Requisitos=$filter('filter')(responseReq.data,{"EtapaReq" : "solicitar"});
+                     //$scope.solicitudAvance.TipoAvance[aux].Requisitos=responseReq.data;
                      aux++;
                   });    
                   
             });
+
       });                        
   });
+
+
+$scope.addVerifica = function(){
+//  alert(JSON.stringify($scope.solicitudAvance)) //permite ver el arreglo que llega
+          verificaAvance=[];
+          var reg=0;
+          angular.forEach($scope.solicitudAvance.TipoAvance, function(tipoAvance, aux) {
+              var idtipo=parseInt(tipoAvance.IdTipo); 
+              var idsolicitud=parseInt(tipoAvance.IdSolicitud); 
+              angular.forEach($scope.solicitudAvance.TipoAvance[aux].Requisitos, function(requisitoAvance, aux2) {
+                    var idreq=parseInt(requisitoAvance.IdReq); 
+                    verificaAvance[reg]= {IdTipo : idtipo,
+                                          IdReq : idreq,
+                                          IdSolicitud:idsolicitud,
+                                          Estado: $scope.solicitudAvance.TipoAvance[aux].Estado,
+                                          FechaRegistro:$scope.solicitudAvance.TipoAvance[aux].FechaRegistro ,
+                                          ReferenciaAvn:$scope.solicitudAvance.TipoAvance[aux].Referencia ,
+                                          NombreAvn:$scope.solicitudAvance.TipoAvance[aux].Nombre ,
+                                          ReferenciaReq:$scope.solicitudAvance.TipoAvance[aux].ReferenciaReq ,
+                                          NombreReq:$scope.solicitudAvance.TipoAvance[aux].NombreReq ,
+                                          DescripcionReq:$scope.solicitudAvance.TipoAvance[aux].DescripcionReq ,
+                                          EtapaReq:$scope.solicitudAvance.TipoAvance[aux].EtapaReq ,
+                                          Valido :requisitoAvance.Valido ,
+                                          Observaciones:requisitoAvance.Observaciones ,
+                                          FechaRegistroReq: '',
+                                          Documento:requisitoAvance.documento,
+                                          EstadoReq: '',
+                                          UbicacionDoc: '',
+                                          Usuario:$scope.solicitudAvance.Estadosolicitud.Usuario
+                                          };
+                      reg++;    
+                    });
+            });
+          //alert(JSON.stringify(verificaAvance)) 
+          $http.post(hostSolicitudAvance+'/verificaavance',verificaAvance)
+                        .then(function(info) {
+                          alert("Se registró la verificación de la solicitud")
+                        });
+          $scope.solicitudAvance  = {};
+          window.location = "#/listarVerificarAvance";  
+  };//fin aadVerifica
+
 
 });
 

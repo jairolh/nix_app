@@ -135,11 +135,12 @@
            <div class="col-sm-4">
              <input name="Celular" type="text" ng-model="solicitudAvance.Beneficiario.Celular" class="form-control"  ng-disabled="true" />
          </div>
-          <div class="contenedor" data-ng-show="viewState === possibleStates[0]">
+          <div class="contenedor" >
            <p align="left"> <u>Tipo de Avance </u> </p>
            <p align="center"> 
-           <a id="IdTipo" href="#/agregarTipoAvanceSolicitud/{{solicitudAvance.Solicitud.Vigencia}}/{{solicitudAvance.Solicitud.Consecutivo}}" class="btn btn-info"> NUEVO TIPO </a>
-           </p>
+         <div ng-if="solicitudAvance.Solicitud.EstadoActual == 'Registrado'">
+           <a id="IdTipo" href="#/agregarTipoAvanceSolicitud/{{solicitudAvance.Solicitud.Vigencia}}/{{solicitudAvance.Solicitud.Consecutivo}}" class="btn btn-info"> NUEVO TIPO </a> </p>
+         </div>
              <table id="solicitudAvance" class="table datatable table-striped table-bordered ">
               <thead>
                 <tr>
