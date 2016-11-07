@@ -20,16 +20,13 @@ nixApp.controller('VerificaAvanceController', function($scope, $http, $routePara
  $http.get(hostSolicitudAvance+'/lista/'+vigencia)
   .then(function(response) {
      //alert(JSON.stringify(response))
-
       $scope.solicitud=$filter('filter')(response.data, {"EstadoActual" : "Registrado"});
-
       //$scope.data = response.data;
   });
-
 });
 
 
-/*******Funcion registrar solicitud********/
+/*******Funcion registrar solicitud** borrar OJO******/
 nixApp.controller('addSolicitudAvanceController', function($scope, $http,$filter) {
   $scope.title = 'Solicitud de Avance';
   $scope.message = 'Registrar Solicitud de Avance';
@@ -206,6 +203,17 @@ nixApp.controller('selVerificaSolicitudAvanceController', function($scope, $http
                                            } ,
                               Estadosolicitud: {Usuario : 'system'},             
                             };
+
+      //busca las solicitudes de avance del beneficiario
+       $http.get(hostSolicitudAvance+'/solicitudAvanceBeneficiario/'+vigencia+'/'+response.data[0].IdSolicitud+'/'+response.data[0].IdBeneficiario)
+        .then(function(responseBen) {
+           //alert(JSON.stringify(responseBen));
+           var solicitudes=$filter('filter')(responseBen.data, {"NombreEstado":"!Legalizado"});
+           solicitudes=$filter('filter')(solicitudes, {"NombreEstado":"!Cancelado"});
+           var count = Object.keys(solicitudes).length;
+           $scope.solicitudAvance.Beneficiario.Pendientes=count;
+        });                            
+
   
     /******busca datos y asigna al array principal el tipo de avance*******/
      var idsolicitud=parseInt(response.data[0].IdSolicitud); 
@@ -276,7 +284,7 @@ $scope.addVerifica = function(){
 
 });
 
-/*********Funcion consultar solicitud***********/
+/*********Funcion consultar solicitud* borrar**********/
 nixApp.controller('addTipoSolicitudAvanceController', function($scope, $http, $routeParams,$filter) {
   
   $scope.title = 'Solicitud de Avance';
