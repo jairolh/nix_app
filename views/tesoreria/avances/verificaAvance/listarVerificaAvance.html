@@ -11,11 +11,11 @@
         <th><input ng-model="search.Consecutivo"></th>
         <th><input ng-model="search.Objetivo"></th>
         <th></th>
-        <th></th>
         <th><input ng-model="search.FechaRegistro"></th>
         <th colspan="2"><input ng-model="search.Documento"></th>
         <th></th>
-        <th</th>
+        <th colspan="2"></th>
+        
       </tr>
     </thead>
     <thead>
@@ -23,12 +23,11 @@
         <th>Vigencia</th>
         <th>Consecutivo</th>
         <th>Objetivo</th>
-        <th>Justificacion</th>
         <th>Valor Total</th>
         <th>Fecha Registro</th>
         <th colspan="2">Beneficiario</th>
         <th>Estado Actual</th>
-        <th align="center">Opciones</th>
+        <th colspan="2" align="center">Opciones</th>
       </tr>
     </thead>
     <tbody>
@@ -36,13 +35,17 @@
         <td>{{sav.Vigencia}}</td>
         <td>{{sav.Consecutivo}}</td>
         <td>{{sav.Objetivo}}</td>
-        <td>{{sav.Justificacion}}</td>
         <td>{{sav.ValorTotal | currency }}</td>
         <td>{{sav.FechaRegistro}}</td>
         <td>{{sav.Documento}}</td>
         <td>{{sav.Nombre}} {{sav.Apellido}}</td>
         <td>{{sav.EstadoActual}}</td>
         <td><a id="IdTipo" href="#/verificarSolicitudAvance/{{sav.Vigencia}}/{{sav.Consecutivo}}">Verificar Requisitos</a></td>
+        <td>
+          <div ng-if="sav.EstadoActual == 'Registrado'">
+             <a href="#/cancelarSolicitudAvance/listarVerificar/{{sav.Vigencia}}/{{sav.Consecutivo}}">Cancelar Solicitud</a> </p>
+           </div>
+        </td>
         <!--td><a id="IdTipo" href="" ng-click="deleteTipo(d.IdTipo)" onclick="return confirm('¿Esta seguro de Borrar el registro?');" >Borrar</a></td></td-->
       </tr>
     </tbody>

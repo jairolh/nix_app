@@ -18,6 +18,7 @@ nixApp.config(function($routeProvider) {
         .when('/agregarSolicitudAvance',                   {templateUrl : 'views/tesoreria/avances/solicitudAvance/agregarSolicitudAvance.html',   controller : 'addSolicitudAvanceController'})
         .when('/consultarSolicitudAvance/:vig/:IdSol',     {templateUrl : 'views/tesoreria/avances/solicitudAvance/consultarSolicitudAvance.html', controller : 'selSolicitudAvanceController'})
         .when('/agregarTipoAvanceSolicitud/:vig/:IdSol',   {templateUrl : 'views/tesoreria/avances/solicitudAvance/agregarTipoAvanceSolicitud.html', controller : 'addTipoSolicitudAvanceController'})
+        .when('/cancelarSolicitudAvance/:opc/:vig/:IdSol',      {templateUrl : 'views/tesoreria/avances/solicitudAvance/cancelarSolicitudAvance.html', controller : 'cancelSolicitudAvanceController'})
         .when('/listarVerificarAvance',                    {templateUrl : 'views/tesoreria/avances/verificaAvance/listarVerificaAvance.html',     controller : 'VerificaAvanceController'})
         .when('/verificarSolicitudAvance/:vig/:IdSol',     {templateUrl : 'views/tesoreria/avances/verificaAvance/verificarSolicitudAvance.html', controller : 'selVerificaSolicitudAvanceController'})
         .when('/about',              {templateUrl : 'views/about.html',controller  : 'aboutController'  })
