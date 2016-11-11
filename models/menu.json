@@ -26,12 +26,12 @@
                     "url": "#/listarSolicitudAvance"
                   },
                   {
-                    "text": "Verificación Avance",
+                    "text": "Verificar Avances",
                     "url": "#/listarVerificarAvance"
                   },
                   {
-                    "text": "Validación Avance",
-                    "url": "#/validar"
+                    "text": "Certificar Avances",
+                    "url": "#/listarCertificarAvance"
                   }
                 ]
             },

@@ -21,6 +21,7 @@ nixApp.config(function($routeProvider) {
         .when('/cancelarSolicitudAvance/:opc/:vig/:IdSol',      {templateUrl : 'views/tesoreria/avances/solicitudAvance/cancelarSolicitudAvance.html', controller : 'cancelSolicitudAvanceController'})
         .when('/listarVerificarAvance',                    {templateUrl : 'views/tesoreria/avances/verificaAvance/listarVerificaAvance.html',     controller : 'VerificaAvanceController'})
         .when('/verificarSolicitudAvance/:vig/:IdSol',     {templateUrl : 'views/tesoreria/avances/verificaAvance/verificarSolicitudAvance.html', controller : 'selVerificaSolicitudAvanceController'})
+        .when('/listarCertificarAvance',                    {templateUrl : 'views/tesoreria/avances/certificaAvance/listarCertificaAvance.html',     controller : 'CertificaAvanceController'})
         .when('/about',              {templateUrl : 'views/about.html',controller  : 'aboutController'  })
         .when('/home',               {templateUrl : 'views/home.html',  controller  : 'homeController' })
         .otherwise({redirectTo: '/home' });
