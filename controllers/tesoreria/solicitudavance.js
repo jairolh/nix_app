@@ -364,8 +364,8 @@ nixApp.controller('cancelSolicitudAvanceController', function($scope, $http, $ro
       //alert(JSON.stringify($scope.solicitudAvance)) //permite ver el arreglo que llega
       var consecutivo=$scope.solicitudAvance.Solicitud.Consecutivo;
       var data = {IdSolicitud:$scope.solicitudAvance.Estadosolicitud.IdSolicitud,
-                  Objetivo: $scope.solicitudAvance.Estadosolicitud.Observacion,
-                  Usuario: $scope.solicitudAvance.Estadosolicitud.usuario,
+                  Observaciones: $scope.solicitudAvance.Estadosolicitud.Observacion,
+                  Usuario: $scope.solicitudAvance.Estadosolicitud.Usuario,
                   };
 
       $http.post(hostSolicitudAvance+'/cancelavance',data)
@@ -373,7 +373,8 @@ nixApp.controller('cancelSolicitudAvanceController', function($scope, $http, $ro
             alert("Se registró la cancelación de la solicitud !")
           });
           //$scope.solicitudAvance  = {};
-          window.location = "#/cancelarSolicitudAvance/"+$scope.opcion+"/"+vigencia+"/"+consecutivo;
+          //window.location = "#/cancelarSolicitudAvance/"+$scope.opcion+"/"+vigencia+"/"+consecutivo;
+          window.location = "#/"+$scope.opcion+"Avance";
  
   };
 
