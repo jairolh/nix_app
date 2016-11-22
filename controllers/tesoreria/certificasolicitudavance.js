@@ -42,7 +42,6 @@ nixApp.controller('selCertificaNecesidadAvanceController', function($scope, $htt
   .then(function(response) {
      //alert(JSON.stringify(response))
      //alert(response.data[0].Vigencia);
-
     $scope.solicitudAvance= {Solicitud:   { Vigencia: response.data[0].Vigencia,
                                             Consecutivo: response.data[0].Consecutivo,
                                             Objetivo: response.data[0].Objetivo,
@@ -107,49 +106,39 @@ nixApp.controller('selCertificaNecesidadAvanceController', function($scope, $htt
                   
             });
 
-      });                        
+      });  
+
+     /***** Consulta las solicitudes de necesidad****/ 
+     $scope.necesidad = function(){
+        $http.get('models/necesidades.json')
+         .then(function(responseNec){
+         // alert(JSON.stringify(response))
+          $scope.solicitudAvance.Presupuesto = $filter('filter')(responseNec.data, {"Vigencia" : $scope.solicitudAvance.Solicitud.Vigencia,"NumeroNecesidad":$scope.solicitudAvance.Presupuesto.NumeroNecesidad})[0];
+          if (!$scope.solicitudAvance.Presupuesto) {alert("No existe la Necesidad !")}
+        });
+      } 
   });
 
-/*
-$scope.addVerifica = function(){
+
+$scope.addNecesidad = function(){
 //  alert(JSON.stringify($scope.solicitudAvance)) //permite ver el arreglo que llega
-          verificaAvance=[];
-          var reg=0;
-          angular.forEach($scope.solicitudAvance.TipoAvance, function(tipoAvance, aux) {
-              var idtipo=parseInt(tipoAvance.IdTipo); 
-              var idsolicitud=parseInt(tipoAvance.IdSolicitud); 
-              angular.forEach($scope.solicitudAvance.TipoAvance[aux].Requisitos, function(requisitoAvance, aux2) {
-                    var idreq=parseInt(requisitoAvance.IdReq); 
-                    verificaAvance[reg]= {IdTipo : idtipo,
-                                          IdReq : idreq,
-                                          IdSolicitud:idsolicitud,
-                                          Estado: $scope.solicitudAvance.TipoAvance[aux].Estado,
-                                          FechaRegistro:$scope.solicitudAvance.TipoAvance[aux].FechaRegistro ,
-                                          ReferenciaAvn:$scope.solicitudAvance.TipoAvance[aux].Referencia ,
-                                          NombreAvn:$scope.solicitudAvance.TipoAvance[aux].Nombre ,
-                                          ReferenciaReq:$scope.solicitudAvance.TipoAvance[aux].ReferenciaReq ,
-                                          NombreReq:$scope.solicitudAvance.TipoAvance[aux].NombreReq ,
-                                          DescripcionReq:$scope.solicitudAvance.TipoAvance[aux].DescripcionReq ,
-                                          EtapaReq:$scope.solicitudAvance.TipoAvance[aux].EtapaReq ,
-                                          Valido :requisitoAvance.Valido ,
-                                          Observaciones:requisitoAvance.Observaciones ,
-                                          FechaRegistroReq: '',
-                                          Documento:requisitoAvance.documento,
-                                          EstadoReq: '',
-                                          UbicacionDoc: '',
-                                          Usuario:$scope.solicitudAvance.Estadosolicitud.Usuario
-                                          };
-                      reg++;    
-                    });
-            });
-          //alert(JSON.stringify(verificaAvance)) 
-          $http.post(hostSolicitudAvance+'/verificaavance',verificaAvance)
-                        .then(function(info) {
-                          alert("Se registró la verificación de la solicitud")
-                        });
+          presupuestoAvance= {IdSolicitud:$scope.solicitudAvance.TipoAvance[0].IdSolicitud,
+                              Vigencia:$scope.solicitudAvance.Presupuesto.Vigencia,
+                              UnidadEjecutora:$scope.solicitudAvance.Presupuesto.UnidadEjecutora,
+                              InternoRubro:$scope.solicitudAvance.Presupuesto.InternoRubro,
+                              NombreRubro:$scope.solicitudAvance.Presupuesto.NombreRubro,
+                              NumeroNecesidad:$scope.solicitudAvance.Presupuesto.NumeroNecesidad,
+                              Objeto:$scope.solicitudAvance.Presupuesto.Objeto,
+                              ValorNecesidad:$scope.solicitudAvance.Presupuesto.ValorNecesidad,
+                              Usuario:$scope.solicitudAvance.Estadosolicitud.Usuario
+                              };
+          //alert(JSON.stringify(presupuestoAvance)) 
+          $http.post(hostSolicitudAvance+'/necesidadavance',presupuestoAvance)
+              .then(function(info) {
+                alert("Se registró la certificación de la Necesidad")
+                });
           $scope.solicitudAvance  = {};
-          window.location = "#/listarVerificarAvance";  
+          window.location = "#/listarCertificarAvance"; 
   };//fin aadVerifica
-*/
 
 });
