@@ -67,7 +67,7 @@ $http.get('models/dependencias.json')
   $scope.dependencias = responseDep.data;
   });
 $scope.selectDependencia = function(idDep) {     
-        dependencia=$filter('filter')($scope.dependencias, {"CodigoDependencia" : idDep})[0];
+        dependencia=$filter('filter')($scope.dependencias, {"CodigoDependencia" : idDep}, true)[0];
         if (idDep>0) { $scope.solicitudAvance.Solicitud.Dependencia=dependencia.Dependencia; }
         else          { $scope.solicitudAvance.Solicitud.Dependencia="No Aplica";}
   };    
@@ -81,15 +81,15 @@ $http.get('models/facultad.json')
 $scope.selectProyectosFac = function(idFac) {     
         $http.get('models/proyectoscurricular.json')
              .then(function(responsePr){
-                  facultad=$filter('filter')($scope.facultades, {"CodigoFacultad" : idFac})[0];
+                  facultad=$filter('filter')($scope.facultades, {"CodigoFacultad" : idFac}, true)[0];
                   if (idFac>0) { $scope.solicitudAvance.Solicitud.Facultad=facultad.Facultad; }
                   else         {$scope.solicitudAvance.Solicitud.Facultad="No Aplica";}
-                  $scope.proyectoscurr = $filter('filter')(responsePr.data, {"CodigoFacultad" : idFac});
+                  $scope.proyectoscurr = $filter('filter')(responsePr.data, {"CodigoFacultad" : idFac}, true);
               });
   };
 
 $scope.selectProyectoCurr = function(idProy) {     
-        proyecto=$filter('filter')($scope.proyectoscurr, {"CodigoProyectoCurricular" : idProy})[0];
+        proyecto=$filter('filter')($scope.proyectoscurr, {"CodigoProyectoCurricular" : idProy}, true)[0];
         if (idProy>0) { $scope.solicitudAvance.Solicitud.ProyectoCur=proyecto.ProyectoCurricular; }
         else          { $scope.solicitudAvance.Solicitud.ProyectoCur="No Aplica";}
   };  
@@ -278,15 +278,14 @@ nixApp.controller('addTipoSolicitudAvanceController', function($scope, $http, $r
                                  }
                  };
       $http.post(hostSolicitudAvance+'/tipoavance',data)
-          .then(function(info) {
-            alert("Se registró el tipo de avance a la solicitud")
-          });
-          $scope.solicitudAvance  = {};
-          window.location = "#/consultarSolicitudAvance/"+vigencia+"/"+data.Solicitud.Consecutivo;
- 
+        .success(function(info) {
+              alert("Se registró el tipo de avance a la solicitud, correctamente! ")
+              window.location = "#/consultarSolicitudAvance/"+data.Solicitud.Vigencia+"/"+data.Solicitud.Consecutivo;
+            })
+            .error(function(info) {
+              alert("Ha fallado el registro del tipo de avance")
+            }); 
   };
-
-
 });
 
 /*******Funcion cancelar solicitud******/

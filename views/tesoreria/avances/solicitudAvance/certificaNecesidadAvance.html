@@ -18,7 +18,7 @@
              <input name="NumeroNecesidad" type="text" ng-model="solicitudAvance.Presupuesto.NumeroNecesidad" class="form-control" min="0" ng-keypress="($event.which === 13)?necesidad():0" ng-required="true" ng-pattern="/^[0-9]{1,100}$/" />
              
              <span class="messages" style="color:red" ng-show="necesidadAvanceForm.$submitted || necesidadAvanceForm.NumeroNecesidad.$untouched  || necesidadAvanceForm.NumeroNecesidad.$touched">
-                    <span ng-show="necesidadAvanceForm.NumeroNecesidad.$error.required">Debe Ingresar el Número de Necesidad!</span>
+                    <span ng-show="necesidadAvanceForm.NumeroNecesidad.$error.required">Ingrese el Número de Necesidad y oprima la tecla Enter!</span>
                     <span ng-show="necesidadAvanceForm.NumeroNecesidad.$error.pattern">Ingrese un número de necesidad valido!!</span>
              </span>
 
@@ -49,6 +49,7 @@
        <div class="form-group">
          <div class="col-sm-offset-2 col-sm-10">
             <input name="InternoRubro" type="hidden" ng-model="solicitudAvance.Presupuesto.InternoRubro" />
+            <input name="FechaNecesidad" type="hidden" ng-model="solicitudAvance.Presupuesto.FechaNecesidad" />
             <input name="Usuario" type="hidden" ng-model="solicitudAvance.Estadosolicitud.Usuario" />
             <input type="submit" ng-click="addNecesidad()" value="Guardar Certificación" class="btn btn-primary" ng-disabled="!necesidadAvanceForm.$valid || !solicitudAvance.Presupuesto.NombreRubro"   />    
          </div>

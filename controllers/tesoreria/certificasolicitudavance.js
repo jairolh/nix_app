@@ -113,7 +113,7 @@ nixApp.controller('selCertificaNecesidadAvanceController', function($scope, $htt
         $http.get('models/necesidades.json')
          .then(function(responseNec){
          // alert(JSON.stringify(response))
-          $scope.solicitudAvance.Presupuesto = $filter('filter')(responseNec.data, {"Vigencia" : $scope.solicitudAvance.Solicitud.Vigencia,"NumeroNecesidad":$scope.solicitudAvance.Presupuesto.NumeroNecesidad})[0];
+          $scope.solicitudAvance.Presupuesto = $filter('filter')(responseNec.data, {"Vigencia" : $scope.solicitudAvance.Solicitud.Vigencia,"NumeroNecesidad":$scope.solicitudAvance.Presupuesto.NumeroNecesidad}, true)[0];
           if (!$scope.solicitudAvance.Presupuesto) {alert("No existe la Necesidad !")}
         });
       } 
@@ -122,23 +122,26 @@ nixApp.controller('selCertificaNecesidadAvanceController', function($scope, $htt
 
 $scope.addNecesidad = function(){
 //  alert(JSON.stringify($scope.solicitudAvance)) //permite ver el arreglo que llega
-          presupuestoAvance= {IdSolicitud:$scope.solicitudAvance.TipoAvance[0].IdSolicitud,
+          presupuestoAvance= {IdSolicitud:parseInt($scope.solicitudAvance.TipoAvance[0].IdSolicitud),
                               Vigencia:$scope.solicitudAvance.Presupuesto.Vigencia,
                               UnidadEjecutora:$scope.solicitudAvance.Presupuesto.UnidadEjecutora,
-                              InternoRubro:$scope.solicitudAvance.Presupuesto.InternoRubro,
+                              InternoRubro:parseInt($scope.solicitudAvance.Presupuesto.InternoRubro),
                               NombreRubro:$scope.solicitudAvance.Presupuesto.NombreRubro,
-                              NumeroNecesidad:$scope.solicitudAvance.Presupuesto.NumeroNecesidad,
+                              NumeroNecesidad:parseInt($scope.solicitudAvance.Presupuesto.NumeroNecesidad),
                               Objeto:$scope.solicitudAvance.Presupuesto.Objeto,
-                              ValorNecesidad:$scope.solicitudAvance.Presupuesto.ValorNecesidad,
+                              ValorNecesidad:parseFloat($scope.solicitudAvance.Presupuesto.ValorNecesidad),
+                              FechaNecesidad:$scope.solicitudAvance.Presupuesto.FechaNecesidad,
                               Usuario:$scope.solicitudAvance.Estadosolicitud.Usuario
                               };
           //alert(JSON.stringify(presupuestoAvance)) 
           $http.post(hostSolicitudAvance+'/necesidadavance',presupuestoAvance)
-              .then(function(info) {
-                alert("Se registró la certificación de la Necesidad")
-                });
-          $scope.solicitudAvance  = {};
-          window.location = "#/listarCertificarAvance"; 
+            .success(function(info) {
+              alert("Se registraron los datos correctamente")
+              window.location = "#/listarCertificarAvance";
+            })
+            .error(function(info) {
+              alert("Ha fallado el registro de datos")
+            });  
   };//fin aadVerifica
 
 });
