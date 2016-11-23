@@ -15,7 +15,7 @@
           <div class="form-group">
            <label for="NumeroNecesidad" class="col-sm-2 control-label">Necesidad:</label>
            <div class="col-sm-4">
-             <input name="NumeroNecesidad" type="text" ng-model="solicitudAvance.Presupuesto.NumeroNecesidad" class="form-control" min="0" ng-keypress="($event.which === 13)?necesidad():0" ng-required="true" ng-pattern="/^[0-9]{1,100}$/" />
+             <input name="NumeroNecesidad" type="text" ng-model="solicitudAvance.Presupuesto.NumeroNecesidad" class="form-control" min="0" ng-keypress="($event.which === 13)?necesidad():0" ng-required="true" ng-pattern="/^[0-9]{1,100}$/" ng-disabled="solicitudAvance.Presupuesto.Guardado == 'S'" />
              
              <span class="messages" style="color:red" ng-show="necesidadAvanceForm.$submitted || necesidadAvanceForm.NumeroNecesidad.$untouched  || necesidadAvanceForm.NumeroNecesidad.$touched">
                     <span ng-show="necesidadAvanceForm.NumeroNecesidad.$error.required">Ingrese el Número de Necesidad y oprima la tecla Enter!</span>
@@ -51,14 +51,10 @@
             <input name="InternoRubro" type="hidden" ng-model="solicitudAvance.Presupuesto.InternoRubro" />
             <input name="FechaNecesidad" type="hidden" ng-model="solicitudAvance.Presupuesto.FechaNecesidad" />
             <input name="Usuario" type="hidden" ng-model="solicitudAvance.Estadosolicitud.Usuario" />
-            <input type="submit" ng-click="addNecesidad()" value="Guardar Certificación" class="btn btn-primary" ng-disabled="!necesidadAvanceForm.$valid || !solicitudAvance.Presupuesto.NombreRubro"   />    
+            <input type="buttom" ng-click="addNecesidad()" value="Guardar Certificación" class="btn btn-primary" ng-disabled="!necesidadAvanceForm.$valid || !solicitudAvance.Presupuesto.NombreRubro || solicitudAvance.Presupuesto.Guardado == 'S'" />    
          </div>
        </div>  
-     
     </div> 
-
-
-
      <div class="container">  
         <div class="form-group">
           <p align="left"> <input type="checkbox" ng-model="solicitud"> <u>Solicitud </u> </p> 
@@ -230,9 +226,8 @@
           </div>    
         </div>
      </div> 
-   
     </form>            
-     <pre>Form = {{solicitudAvance | json}}</pre> 
+     <!--pre>Form = {{solicitudAvance | json}}</pre--> 
   </div>
 </div>
 

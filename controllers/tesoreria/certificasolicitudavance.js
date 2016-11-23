@@ -73,15 +73,15 @@ nixApp.controller('selCertificaNecesidadAvanceController', function($scope, $htt
                               Estadosolicitud: {Usuario : 'system'},             
                             };
 
-      //busca las solicitudes de avance del beneficiario
-       $http.get(hostSolicitudAvance+'/solicitudAvanceBeneficiario/'+vigencia+'/'+response.data[0].IdSolicitud+'/'+response.data[0].IdBeneficiario)
-        .then(function(responseBen) {
-           //alert(JSON.stringify(responseBen));
-           var solicitudes=$filter('filter')(responseBen.data, {"NombreEstado":"!Legalizado"});
-           solicitudes=$filter('filter')(solicitudes, {"NombreEstado":"!Cancelado"});
-           var count = Object.keys(solicitudes).length;
-           $scope.solicitudAvance.Beneficiario.Pendientes=count;
-        });                            
+    //busca las solicitudes de avance del beneficiario
+     $http.get(hostSolicitudAvance+'/solicitudAvanceBeneficiario/'+vigencia+'/'+response.data[0].IdSolicitud+'/'+response.data[0].IdBeneficiario)
+      .then(function(responseBen) {
+         //alert(JSON.stringify(responseBen));
+         var solicitudes=$filter('filter')(responseBen.data, {"NombreEstado":"!Legalizado"});
+         solicitudes=$filter('filter')(solicitudes, {"NombreEstado":"!Cancelado"});
+         var count = Object.keys(solicitudes).length;
+         $scope.solicitudAvance.Beneficiario.Pendientes=count;
+      });                            
 
   
     /******busca datos y asigna al array principal el tipo de avance*******/
@@ -107,6 +107,18 @@ nixApp.controller('selCertificaNecesidadAvanceController', function($scope, $htt
             });
 
       });  
+
+    /*****busca los datos de financiacion del avance*******/
+     $http.get(hostSolicitudAvance+'/financiaAvance/'+vigencia+'/'+response.data[0].IdSolicitud+'/0')
+      .then(function(responseFin) {
+         //alert(JSON.stringify(responseFin));
+         if (responseFin.data[0]) {
+            $scope.solicitudAvance.Presupuesto=responseFin.data[0];
+            $scope.solicitudAvance.Presupuesto.Guardado='S';
+          }else{
+            $scope.solicitudAvance.Presupuesto.Guardado='N';   
+          }
+      });   
 
      /***** Consulta las solicitudes de necesidad****/ 
      $scope.necesidad = function(){
