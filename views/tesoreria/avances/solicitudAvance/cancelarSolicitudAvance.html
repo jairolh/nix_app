@@ -142,44 +142,44 @@
                <label for="Celular" class="col-sm-2 control-label">Número Celular:</label>
                <div class="col-sm-4">
                  <input name="Celular" type="text" ng-model="solicitudAvance.Beneficiario.Celular" class="form-control"  ng-disabled="true" />
-             </div>
-       </div> 
+               </div>
+             </div> 
+         </div>        
      </div>   
      <div class="container">   
-     <div class="form-group"> 
-     <p align="left"><input type="checkbox" ng-model="tipos"> <u>Tipos de Avance</u> </p> 
-     </div>           
-         <div class="container" ng-show="tipos">
-            <table id="solicitudAvance" class="table datatable table-striped table-bordered ">
-                <thead>
-                  <tr>
-                    <th>Referencia</th>
-                    <th>Nombre</th>
-                    <th>Valor</th>
-                    <th>Descripcion</th>
-                    <th align="center" colspan="2">Requisitos - Etápa</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr ng-repeat="tav in solicitudAvance.TipoAvance">
-                    <td>{{tav.Referencia}}</td>
-                    <td>{{tav.Nombre}}</td>
-                    <td>{{tav.Valor | currency }}</td>
-                    <td>{{tav.Descripcion}}</td>
-                    <td colspan="2">
-                       <table>  
-                        <tr ng-repeat="req in tav.Requisitos"> 
-                         <td width="15%">{{req.Referencia}}</td>
-                         <td width="60%">{{req.Nombre}}</td> 
-                         <td width="25%">( {{req.Etapa}} )</td> 
-                        </tr> 
-                        </table>
-                    </td>    
-                  </tr>
-                </tbody>
-              </table>
-           </div>
-         </div>           
+       <div class="form-group"> 
+       <p align="left"><input type="checkbox" ng-model="tipos"> <u>Tipos de Avance</u> </p> 
+       </div>           
+           <div class="container" ng-show="tipos">
+              <table id="solicitudAvance" class="table datatable table-striped table-bordered ">
+                  <thead>
+                    <tr>
+                      <th>Referencia</th>
+                      <th>Nombre</th>
+                      <th>Valor</th>
+                      <th>Descripcion</th>
+                      <th align="center" colspan="2">Requisitos - Etápa</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="tav in solicitudAvance.TipoAvance">
+                      <td>{{tav.Referencia}}</td>
+                      <td>{{tav.Nombre}}</td>
+                      <td>{{tav.Valor | currency }}</td>
+                      <td>{{tav.Descripcion}}</td>
+                      <td colspan="2">
+                         <table>  
+                          <tr ng-repeat="req in tav.Requisitos"> 
+                           <td width="15%">{{req.Referencia}}</td>
+                           <td width="60%">{{req.Nombre}}</td> 
+                           <td width="25%">( {{req.Etapa}} )</td> 
+                          </tr> 
+                          </table>
+                      </td>    
+                    </tr>
+                  </tbody>
+                </table>
+           </div>           
      </div> 
      <div class="form-group">
        <label for="ObservacionCancela" class="col-sm-2 control-label">Observación de Cancelación:</label>
