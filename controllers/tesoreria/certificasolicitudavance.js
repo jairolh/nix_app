@@ -142,7 +142,6 @@ nixApp.controller('selCertificaNecesidadAvanceController', function($scope, $htt
                               Objeto:$scope.solicitudAvance.Presupuesto.Objeto,
                               ValorNecesidad:parseFloat($scope.solicitudAvance.Presupuesto.ValorNecesidad),
                               FechaNecesidad:$scope.solicitudAvance.Presupuesto.FechaNecesidad,
-                              Usuario:$scope.solicitudAvance.Estadosolicitud.Usuario
                               };
           //alert(JSON.stringify(presupuestoAvance)) 
           $http.post(hostSolicitudAvance+'/necesidadavance',presupuestoAvance)
@@ -210,8 +209,6 @@ nixApp.controller('selCertificaApruebaAvanceController', function($scope, $http,
            var count = Object.keys(solicitudes).length;
            $scope.solicitudAvance.Beneficiario.Pendientes=count;
         });                            
-
-  
       /******busca datos y asigna al array principal el tipo de avance*******/
        var idsolicitud=parseInt(response.data[0].IdSolicitud); 
        $http.get(hostSolicitudAvance+'/tiposAvance/'+vigencia+'/'+idsolicitud+'/0')
@@ -231,9 +228,7 @@ nixApp.controller('selCertificaApruebaAvanceController', function($scope, $http,
                        //$scope.solicitudAvance.TipoAvance[aux].Requisitos=responseReq.data;
                        aux++;
                     });    
-                    
               });
-
         });  
 
       /*****busca los datos de financiacion del avance*******/
@@ -261,28 +256,42 @@ nixApp.controller('selCertificaApruebaAvanceController', function($scope, $http,
 
   
   $scope.addAprueba = function(){
-     alert(JSON.stringify($scope.solicitudAvance)) //permite ver el arreglo que llega
-   /*
-          presupuestoAvance= {IdSolicitud:parseInt($scope.solicitudAvance.TipoAvance[0].IdSolicitud),
-                              Vigencia:$scope.solicitudAvance.Presupuesto.Vigencia,
-                              UnidadEjecutora:$scope.solicitudAvance.Presupuesto.UnidadEjecutora,
-                              InternoRubro:parseInt($scope.solicitudAvance.Presupuesto.InternoRubro),
-                              NombreRubro:$scope.solicitudAvance.Presupuesto.NombreRubro,
-                              NumeroNecesidad:parseInt($scope.solicitudAvance.Presupuesto.NumeroNecesidad),
-                              Objeto:$scope.solicitudAvance.Presupuesto.Objeto,
-                              ValorNecesidad:parseFloat($scope.solicitudAvance.Presupuesto.ValorNecesidad),
-                              FechaNecesidad:$scope.solicitudAvance.Presupuesto.FechaNecesidad,
-                              Usuario:$scope.solicitudAvance.Estadosolicitud.Usuario
-                              };
+     //alert(JSON.stringify($scope.solicitudAvance)) //permite ver el arreglo que llega
+      var data = { Presupuesto: {IdSolicitud:parseInt($scope.solicitudAvance.TipoAvance[0].IdSolicitud),
+                                    Vigencia:$scope.solicitudAvance.Presupuesto.Vigencia,
+                                    UnidadEjecutora:$scope.solicitudAvance.Presupuesto.UnidadEjecutora,
+                                    InternoRubro:parseInt($scope.solicitudAvance.Presupuesto.InternoRubro),
+                                    NombreRubro:$scope.solicitudAvance.Presupuesto.NombreRubro,
+                                    NumeroNecesidad:parseInt($scope.solicitudAvance.Presupuesto.NumeroNecesidad),
+                                    Objeto:$scope.solicitudAvance.Presupuesto.Objeto,
+                                    ValorNecesidad:parseFloat($scope.solicitudAvance.Presupuesto.ValorNecesidad),
+                                    FechaNecesidad:$scope.solicitudAvance.Presupuesto.FechaNecesidad,
+                                    Disponibilidad:parseInt($scope.solicitudAvance.Presupuesto.Disponibilidad),
+                                    FechaDisp: $scope.solicitudAvance.Presupuesto.FechaDisp,
+                                    ValorDisp: parseFloat($scope.solicitudAvance.Presupuesto.ValorDisp),
+                                    Registro : 0,
+                                    FechaRegistro: '',
+                                    ValorRegistro : 0,
+                                    Compromiso :  0,
+                                    OrdenPago   : 0,
+                                    FechaOrden   : '',
+                                    ValorOrden   :  0
+                                },
+
+                  Estadosolicitud: {IdSolicitud:parseInt($scope.solicitudAvance.TipoAvance[0].IdSolicitud),
+                                    Observaciones: $scope.solicitudAvance.Estadosolicitud.Observacion,
+                                    Usuario: $scope.solicitudAvance.Estadosolicitud.Usuario,}, 
+                };
           //alert(JSON.stringify(presupuestoAvance)) 
-          $http.post(hostSolicitudAvance+'/necesidadavance',presupuestoAvance)
+          $http.post(hostSolicitudAvance+'/apruebaavance',data)
             .success(function(info) {
+              //alert(JSON.stringify(info)) 
               alert("Se registraron los datos correctamente")
               window.location = "#/listarCertificarAvance";
             })
             .error(function(info) {
               alert("Ha fallado el registro de datos")
-            });  */
+            });  
   };//fin addAprueba
   
 });

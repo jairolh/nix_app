@@ -39,9 +39,21 @@
         <td>{{sav.Documento}}</td>
         <td>{{sav.Nombre}} {{sav.Apellido}}</td>
         <td>{{sav.EstadoActual}}</td>
-        <td><a id="IdTipo" href="#/certificarNecesidadAvance/{{sav.Vigencia}}/{{sav.Consecutivo}}">Certificar Necesidad</a></td>
-        <td><a href="#/certificarApruebaAvance/{{sav.Vigencia}}/{{sav.Consecutivo}}">Certificar Aprobación</a> </p></td>
-        <td><a href="#/certificarSolicitudAvance/giro/{{sav.Vigencia}}/{{sav.Consecutivo}}">Certificar Giro</a> </p></td>
+        <td> 
+          <div ng-if="sav.EstadoActual == 'Verificado'">
+            <a id="IdTipo" href="#/certificarNecesidadAvance/{{sav.Vigencia}}/{{sav.Consecutivo}}">Certificar Necesidad</a>
+          </div>
+        </td>
+        <td> 
+          <div ng-if="sav.EstadoActual == 'Verificado'">
+            <a href="#/certificarApruebaAvance/{{sav.Vigencia}}/{{sav.Consecutivo}}">Certificar Aprobación</a> </p>
+          </div>
+        </td>
+        <td>
+          <div ng-if="sav.EstadoActual == 'Aprobado'">
+            <a href="#/certificarSolicitudAvance/giro/{{sav.Vigencia}}/{{sav.Consecutivo}}">Certificar Giro</a> </p>
+          </div>
+        </td>
         <!--td><a id="IdTipo" href="" ng-click="deleteTipo(d.IdTipo)" onclick="return confirm('¿Esta seguro de Borrar el registro?');" >Borrar</a></td></td-->
       </tr>
     </tbody>
