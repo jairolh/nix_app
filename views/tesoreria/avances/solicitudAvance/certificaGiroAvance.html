@@ -40,6 +40,10 @@
            <label for="OrdenPago" class="col-sm-2 control-label">Orden de Pago:</label>
            <div class="col-sm-4">
              <input name="OrdenPago" type="text" ng-model="solicitudAvance.Presupuesto.OrdenPago" class="form-control" min="1" ng-required="true" ng-disabled="true" />
+             <span class="messages" style="color:red" ng-show="giroAvanceForm.$submitted || giroAvanceForm.OrdenPago.$touched || giroAvanceForm.OrdenPago.$untouched " >
+                    <span ng-show="giroAvanceForm.OrdenPago.$error.required">Debe Existir una Orden de Pago asociada a la Solicitud!</span>
+                    <span ng-show="giroAvanceForm.OrdenPago.$error.mim">Debe Existir una Orden de Pago asociada a la Solicitud!</span>
+             </span>  
            </div>
            <label for="FechaOrden" class="col-sm-2 control-label">Fecha Orden:</label>
            <div class="col-sm-4">
@@ -54,7 +58,7 @@
            <label for="FechaCertificacion" class="col-sm-2 control-label">Fecha Certificacion del Giro:</label>
            <div class="col-sm-4">
               <span class="input-group-addon">
-                <input name="FechaCertificacion"  type="text"  ng-model="solicitudAvance.Estadosolicitud.FechaCertificacion" readonly="true" ng-required="true"/>
+                <input name="FechaCertificacion"  type="text"  ng-model="solicitudAvance.Presupuesto.FechaCertificacion" readonly="true" ng-required="true"/>
                 <i id="datepicker"  data-ng-datepicker class="glyphicon glyphicon-calendar"></i> 
               </span>
               <span class="messages" style="color:red" ng-show="giroAvanceForm.$submitted || giroAvanceForm.FechaCertificacion.$touched || giroAvanceForm.FechaCertificacion.$untouched " >
@@ -76,7 +80,7 @@
            <div class="col-sm-offset-2 col-sm-10">
               <input name="InternoRubro" type="hidden" ng-model="solicitudAvance.Presupuesto.InternoRubro" />
               <input name="Usuario" type="hidden" ng-model="solicitudAvance.Estadosolicitud.Usuario" />
-              <input type="buttom" ng-click="addAprueba()" value="Guardar Aprobación" class="btn btn-primary" ng-disabled="!giroAvanceForm.$valid || !solicitudAvance.Presupuesto.Registro " />    
+              <input type="buttom" ng-click="addGiro()" value="Guardar Certificar Giro" class="btn btn-primary" ng-disabled="!giroAvanceForm.$valid || !solicitudAvance.Presupuesto.Registro " />    
            </div>
          </div>  
     </div> 
@@ -313,7 +317,7 @@
         </div>   
      </div> 
     </form>            
-     <pre>Form = {{solicitudAvance | json}}</pre> 
+     <!--pre>Form = {{solicitudAvance | json}}</pre--> 
   </div>
 </div>
 

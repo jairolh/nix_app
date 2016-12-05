@@ -314,7 +314,7 @@ nixApp.controller('selCertificaGiroAvanceController', function($scope, $http, $r
           });
 
     $scope.asignarFecha = function (fecha){
-         $scope.solicitudAvance.Estadosolicitud.FechaCertificacion=fecha;
+         $scope.solicitudAvance.Presupuesto.FechaCertificacion=fecha;
         };
 
 
@@ -391,29 +391,34 @@ nixApp.controller('selCertificaGiroAvanceController', function($scope, $http, $r
       /*****busca los datos de financiacion del avance*******/
        $http.get(hostSolicitudAvance+'/financiaAvance/'+vigencia+'/'+response.data[0].IdSolicitud+'/0')
         .then(function(responseFin) {
-           alert(JSON.stringify(responseFin));
+           //alert(JSON.stringify(responseFin));
            if (responseFin.data[0]) {
               $scope.solicitudAvance.Presupuesto=responseFin.data[0];
             }
         });   
         /******Busca el certificado de disponibilidad relacionado a la necesidad******/
-        $http.get('models/disponibilidades.json')
-         .then(function(responseCDP){
-          //alert(JSON.stringify(responseCDP))
-          $scope.disponibilidad= $filter('filter')(responseCDP.data, {"Vigencia" : $scope.solicitudAvance.Solicitud.Vigencia,"NumeroNecesidad":$scope.solicitudAvance.Presupuesto.NumeroNecesidad.toString()},true)[0];
+        $http.get('models/ordenpago.json')
+         .then(function(responseOP){
+          //alert(JSON.stringify(responseOP))
+          $scope.disponibilidad= $filter('filter')(responseOP.data, {"Vigencia" : $scope.solicitudAvance.Solicitud.Vigencia,"Disponibilidad":$scope.solicitudAvance.Presupuesto.Disponibilidad.toString()},true)[0];
           if (!$scope.disponibilidad) {
               $scope.solicitudAvance.Presupuesto.Registro="";
+              $scope.solicitudAvance.Presupuesto.OrdenPago="";
             }else{
-              $scope.solicitudAvance.Presupuesto.Registro="";
-              /*$scope.solicitudAvance.Presupuesto.Disponibilidad=$scope.disponibilidad.Disponibilidad;
-              $scope.solicitudAvance.Presupuesto.ValorDisp=$scope.disponibilidad.ValorDisp;
-              $scope.solicitudAvance.Presupuesto.FechaDisp=$scope.disponibilidad.FechaDisp;*/
+              $scope.solicitudAvance.Presupuesto.Registro=$scope.disponibilidad.Registro;
+              $scope.solicitudAvance.Presupuesto.ValorRegistro=$scope.disponibilidad.ValorRegistro;
+              $scope.solicitudAvance.Presupuesto.FechaRegistro=$scope.disponibilidad.FechaRegistro;
+              $scope.solicitudAvance.Presupuesto.Compromiso=$scope.disponibilidad.Compromiso;              
+              $scope.solicitudAvance.Presupuesto.OrdenPago=$scope.disponibilidad.OrdenPago;
+              $scope.solicitudAvance.Presupuesto.ValorOrden=$scope.disponibilidad.ValorOrden;
+              $scope.solicitudAvance.Presupuesto.FechaOrden=$scope.disponibilidad.FechaOrden;
+              $scope.solicitudAvance.Estadosolicitud.FechaCertificacion=$scope.disponibilidad.FechaPago;
             }
           });
   });
 
   
-  $scope.addAprueba = function(){
+  $scope.addGiro = function(){
      //alert(JSON.stringify($scope.solicitudAvance)) //permite ver el arreglo que llega
       var data = { Presupuesto: {IdSolicitud:parseInt($scope.solicitudAvance.TipoAvance[0].IdSolicitud),
                                     Vigencia:$scope.solicitudAvance.Presupuesto.Vigencia,
@@ -427,21 +432,23 @@ nixApp.controller('selCertificaGiroAvanceController', function($scope, $http, $r
                                     Disponibilidad:parseInt($scope.solicitudAvance.Presupuesto.Disponibilidad),
                                     FechaDisp: $scope.solicitudAvance.Presupuesto.FechaDisp,
                                     ValorDisp: parseFloat($scope.solicitudAvance.Presupuesto.ValorDisp),
-                                    Registro : 0,
-                                    FechaRegistro: '',
-                                    ValorRegistro : 0,
-                                    Compromiso :  0,
-                                    OrdenPago   : 0,
-                                    FechaOrden   : '',
-                                    ValorOrden   :  0
-                                },
+                                    Registro : parseInt($scope.solicitudAvance.Presupuesto.Registro),
+                                    FechaRegistro: $scope.solicitudAvance.Presupuesto.FechaRegistro,
+                                    ValorRegistro : parseFloat($scope.solicitudAvance.Presupuesto.ValorRegistro),
+                                    Compromiso :  parseInt($scope.solicitudAvance.Presupuesto.Compromiso),
+                                    OrdenPago   : parseInt($scope.solicitudAvance.Presupuesto.OrdenPago),
+                                    FechaOrden   : $scope.solicitudAvance.Presupuesto.FechaOrden,
+                                    ValorOrden   :  parseFloat($scope.solicitudAvance.Presupuesto.ValorOrden),
+                                    FechaCertificacion: $scope.solicitudAvance.Presupuesto.FechaCertificacion
 
+                                },
                   Estadosolicitud: {IdSolicitud:parseInt($scope.solicitudAvance.TipoAvance[0].IdSolicitud),
                                     Observaciones: $scope.solicitudAvance.Estadosolicitud.Observacion,
-                                    Usuario: $scope.solicitudAvance.Estadosolicitud.Usuario,}, 
+                                    Usuario: $scope.solicitudAvance.Estadosolicitud.Usuario
+                                  }, 
                 };
-          //alert(JSON.stringify(presupuestoAvance)) 
-          $http.post(hostSolicitudAvance+'/apruebaavance',data)
+          //alert(JSON.stringify(data)) 
+          $http.post(hostSolicitudAvance+'/giroavance',data)
             .success(function(info) {
               //alert(JSON.stringify(info)) 
               alert("Se registraron los datos correctamente")
@@ -449,8 +456,8 @@ nixApp.controller('selCertificaGiroAvanceController', function($scope, $http, $r
             })
             .error(function(info) {
               alert("Ha fallado el registro de datos")
-            });  
-  };//fin addAprueba
+            }); 
+  };//fin addGiro
   
 });
 
