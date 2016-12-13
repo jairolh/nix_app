@@ -1,0 +1,79 @@
+<div class="jumbotron text-center">
+  <h2>{{ title }}</h2>
+  <div class="form-group">
+      <p align="center"> {{ message }} </p>
+  </div>
+  <div class="contenedor" data-ng-show="viewState === possibleStates[0]">
+   <table id="solicitudAvance" class="table datatable table-striped table-bordered ">
+    <thead>
+      <tr>
+        <th>Busquedas: </th>
+        <th><input ng-model="search.Consecutivo"></th>
+        <th><input ng-model="search.Objetivo"></th>
+        <th></th>
+        <th colspan="2"><input ng-model="search.Documento"></th>
+        <th></th>
+        <th><input ng-model="search.FechaCertificacion"></th>
+        <th></th>
+        <th></th>
+        <th colspan="2"></th>
+      </tr>
+    </thead>
+    <thead>
+      <tr>
+        <th>Vigencia</th>
+        <th>Consecutivo</th>
+        <th>Objetivo</th>
+        <th>Valor Total</th>
+        <th colspan="2">Beneficiario</th>
+        <th>Estado Actual</th>
+        <th>Fecha Certificación Giro</th>
+        <th>Fecha Limite para Legalizar</th>
+        <th>Observaciones</th>
+        <th colspan="2" align="center">Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="sav in solicitud | filter:search:strict">
+        <td>{{sav.Vigencia}}</td>
+        <td>{{sav.Consecutivo}}</td>
+        <td>{{sav.Objetivo}}</td>
+        <td>{{sav.ValorTotal | currency }}</td>
+        <td>{{sav.Documento}}</td>
+        <td>{{sav.Nombre}} {{sav.Apellido}}</td>
+        <td>{{sav.EstadoActual}}</td>
+        <td>{{sav.FechaCertificacion}}</td>
+        <td>
+          <div ng-init="fechaMax = fechaLegalizar(sav.FechaCertificacion)">{{ fechaMax }}
+          </div>
+        </td>
+        <td>
+          <div ng-init="fechaDiferencia = fechaDiferencia(hoy,fechaMax)" ng-if =" hoy >= fechaMax" >
+              <span class="messages" style="color:red" ng-if =" hoy > fechaMax" >
+                <span ng-init="fechaDiferencia = fechaDiferencia(hoy,fechaMax)" >Legalización con {{ fechaDiferencia }} días de retraso ! </span>
+              </span>
+              <span class="messages" style="color:green" ng-if =" hoy == fechaMax" >
+                <span><b>Ultimo día para legalizar!</b></span>
+              </span>
+          </div>
+        </td>
+
+
+        <td> 
+          <div ng-if="sav.EstadoActual == 'Girado'">
+            <a id="IdTipo" href="#/verificarSoportesAvance/{{sav.Vigencia}}/{{sav.Consecutivo}}">Verificar Soportes</a>
+          </div>
+        </td>
+        <td> 
+          <div ng-if="sav.EstadoActual == 'Girado'">
+            <a href="#/legalizarAvance/{{sav.Vigencia}}/{{sav.Consecutivo}}">Legalizar</a> </p>
+          </div>
+        </td>
+        <!--td><a id="IdTipo" href="" ng-click="deleteTipo(d.IdTipo)" onclick="return confirm('¿Esta seguro de Borrar el registro?');" >Borrar</a></td></td-->
+      </tr>
+    </tbody>
+  </table>
+ </div>
+
+
+

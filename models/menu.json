@@ -36,6 +36,17 @@
                 ]
             },
             {
+                "id": "2",
+                "text": "Legalizar Avance",
+                "url": "#",
+                "subopciones": [
+                  {
+                    "text": "Avances a Legalizar",
+                    "url": "#/listarLegalizarAvance"
+                  }
+                ]
+            },            
+            {
               "id": "1",
               "text": "Opciones",
                 "url": "#",
