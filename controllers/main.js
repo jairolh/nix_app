@@ -1,6 +1,7 @@
 // Creación del módulo
 var nixApp = angular.module('nixApp', ['ngRoute']);
 var host = 'http://localhost:8088';
+var hostSicapital = 'http://localhost';
 // Configuración de las rutas
 nixApp.config(function($routeProvider) {
 

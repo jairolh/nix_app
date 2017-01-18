@@ -2,10 +2,12 @@
 //var nixApp = angular.module('nixApp', ['ngRoute']);
 var hostSolicitudAvance = host+'/tesoreria/solicitudavance';
 var hostTipoAvance = host+'/tesoreria/tipoavance';
+var hostServiceSic = hostSicapital+'/sicws/ws/sicapitalAPI.php/?'
 //var idReqFind;
 var vigencia;
+var vigenciaActual;
 var fecha = new Date();
-vigencia=fecha.getFullYear();
+vigenciaActual=fecha.getFullYear();
 
 var idSolicitud;
 // Configuración de las rutas
@@ -15,7 +17,8 @@ nixApp.controller('CertificaAvanceController', function($scope, $http, $routePar
   
   $scope.title = 'Certificación Solicitud de Avance';
   $scope.message = 'Listado de Solicitudes de Avance';
- 
+  vigencia=vigenciaActual;
+  $scope.vigencias=[{vig:(vigencia-1)},{vig:vigencia}]; 
   //busca datos del tipo de avance
    $http.get(hostSolicitudAvance+'/lista/'+vigencia)
     .then(function(response) {
@@ -26,6 +29,21 @@ nixApp.controller('CertificaAvanceController', function($scope, $http, $routePar
         solicitudes=$filter('filter')(solicitudes, {"EstadoActual":"!Girado"});
         $scope.solicitud=solicitudes;
     });
+
+  $scope.selectVigencia = function(vige){
+  //alert('hola'+vige);
+      $scope.solicitud='';
+      $http.get(hostSolicitudAvance+'/lista/'+vige)
+        .then(function(response) {
+           //alert(JSON.stringify(response))
+          solicitudes=$filter('filter')(response.data, {"EstadoActual":"!Registrado"});
+          solicitudes=$filter('filter')(solicitudes, {"EstadoActual":"!Cancelado"});
+          solicitudes=$filter('filter')(solicitudes, {"EstadoActual":"!Legalizado"});
+          solicitudes=$filter('filter')(solicitudes, {"EstadoActual":"!Girado"});
+          $scope.solicitud=solicitudes;
+        });
+  }
+
 });
 
 /******Funcion certificar necesidad de solicitud****/
@@ -120,13 +138,30 @@ nixApp.controller('selCertificaNecesidadAvanceController', function($scope, $htt
         });   
 
        /***** Consulta las solicitudes de necesidad****/ 
-       $scope.necesidad = function(){
-          $http.get('models/necesidades.json')
+       $scope.necesidad = function(nec){
+          $http.get(hostServiceSic+'/necesidad/sol/'+$scope.solicitudAvance.Solicitud.Vigencia+'/'+nec)
            .then(function(responseNec){
-           // alert(JSON.stringify(response))
+            if (!Array.isArray(responseNec.data)){
+                  $scope.solicitudAvance.Presupuesto='';
+                  alert("No existe la Necesidad !")}
+            else{ $scope.solicitudAvance.Presupuesto.NumeroNecesidad=responseNec.data[0].NUMERONECESIDAD;
+                  $scope.solicitudAvance.Presupuesto.Vigencia=responseNec.data[0].VIGENCIA;
+                  $scope.solicitudAvance.Presupuesto.UnidadEjecutora=responseNec.data[0].UNIDADEJECUTORA;
+                  $scope.solicitudAvance.Presupuesto.InternoRubro=responseNec.data[0].INTERNORUBRO;
+                  $scope.solicitudAvance.Presupuesto.NombreRubro=responseNec.data[0].CODIGORUBRO+" "+responseNec.data[0].NOMBRERUBRO;;
+                  $scope.solicitudAvance.Presupuesto.Objeto=responseNec.data[0].OBJETO;
+                  $scope.solicitudAvance.Presupuesto.ValorNecesidad=responseNec.data[0].VALORNECESIDAD;
+                  $scope.solicitudAvance.Presupuesto.FechaNecesidad=responseNec.data[0].FECHANECESIDAD;
+                }  
+
+          });
+          /*
+          $http.get('models/necesidad.json')
+           .then(function(responseNec){
+            alert(JSON.stringify(response))
             $scope.solicitudAvance.Presupuesto = $filter('filter')(responseNec.data, {"Vigencia" : $scope.solicitudAvance.Solicitud.Vigencia,"NumeroNecesidad":$scope.solicitudAvance.Presupuesto.NumeroNecesidad}, true)[0];
             if (!$scope.solicitudAvance.Presupuesto) {alert("No existe la Necesidad !")}
-          });
+          });*/
         } 
   });
 
@@ -230,30 +265,28 @@ nixApp.controller('selCertificaApruebaAvanceController', function($scope, $http,
                     });    
               });
         });  
-
+      
       /*****busca los datos de financiacion del avance*******/
        $http.get(hostSolicitudAvance+'/financiaAvance/'+vigencia+'/'+response.data[0].IdSolicitud+'/0')
         .then(function(responseFin) {
            //alert(JSON.stringify(responseFin));
            if (responseFin.data[0]) {
               $scope.solicitudAvance.Presupuesto=responseFin.data[0];
+              /******Busca el certificado de disponibilidad relacionado a la necesidad******/
+              $http.get(hostServiceSic+'/disponibilidad/cdpnec/'+$scope.solicitudAvance.Solicitud.Vigencia+'/'+$scope.solicitudAvance.Presupuesto.NumeroNecesidad.toString())
+               .then(function(responseCDP){
+                $scope.disponibilidad=responseCDP.data[0];
+                if (!$scope.disponibilidad) {
+                    $scope.solicitudAvance.Presupuesto.Disponibilidad="";
+                  }else{
+                    $scope.solicitudAvance.Presupuesto.Disponibilidad=$scope.disponibilidad.DISPONIBILIDAD;
+                    $scope.solicitudAvance.Presupuesto.ValorDisp=$scope.disponibilidad.VALOR_DISP;
+                    $scope.solicitudAvance.Presupuesto.FechaDisp=$scope.disponibilidad.FECHADISP;
+                  }
+                });
             }
         });   
-        /******Busca el certificado de disponibilidad relacionado a la necesidad******/
-        $http.get('models/disponibilidades.json')
-         .then(function(responseCDP){
-          //alert(JSON.stringify(responseCDP))
-          $scope.disponibilidad= $filter('filter')(responseCDP.data, {"Vigencia" : $scope.solicitudAvance.Solicitud.Vigencia,"NumeroNecesidad":$scope.solicitudAvance.Presupuesto.NumeroNecesidad.toString()},true)[0];
-          if (!$scope.disponibilidad) {
-              $scope.solicitudAvance.Presupuesto.Disponibilidad="";
-            }else{
-              $scope.solicitudAvance.Presupuesto.Disponibilidad=$scope.disponibilidad.Disponibilidad;
-              $scope.solicitudAvance.Presupuesto.ValorDisp=$scope.disponibilidad.ValorDisp;
-              $scope.solicitudAvance.Presupuesto.FechaDisp=$scope.disponibilidad.FechaDisp;
-            }
-          });
   });
-
   
   $scope.addAprueba = function(){
      //alert(JSON.stringify($scope.solicitudAvance)) //permite ver el arreglo que llega
@@ -394,27 +427,31 @@ nixApp.controller('selCertificaGiroAvanceController', function($scope, $http, $r
            //alert(JSON.stringify(responseFin));
            if (responseFin.data[0]) {
               $scope.solicitudAvance.Presupuesto=responseFin.data[0];
+              /******Busca el certificado de disponibilidad relacionado a la necesidad******/
+              $http.get(hostServiceSic+'/ordenpago/opcdp/'+$scope.solicitudAvance.Solicitud.Vigencia+'/'+$scope.solicitudAvance.Presupuesto.Disponibilidad.toString())
+               .then(function(responseOP){
+                //alert(JSON.stringify(responseOP.data[0]));
+                $scope.disponibilidad=responseOP.data[0];
+                if (!$scope.disponibilidad) {
+                      $scope.solicitudAvance.Presupuesto.Registro="";
+                      $scope.solicitudAvance.Presupuesto.OrdenPago="";
+                    }else{
+                      $scope.solicitudAvance.Presupuesto.Registro=$scope.disponibilidad.REGISTROPRESUPUESTAL;
+                      $scope.solicitudAvance.Presupuesto.ValorRegistro=$scope.disponibilidad.VALOR_CRP;
+                      $scope.solicitudAvance.Presupuesto.FechaRegistro=$scope.disponibilidad.FECHAREGISTRO;
+                      $scope.solicitudAvance.Presupuesto.Compromiso=$scope.disponibilidad.NUMEROCOMPROMISO;              
+                      $scope.solicitudAvance.Presupuesto.OrdenPago=$scope.disponibilidad.ORDENPAGO;
+                      $scope.solicitudAvance.Presupuesto.ValorOrden=$scope.disponibilidad.VALORORDEN;
+                      $scope.solicitudAvance.Presupuesto.FechaOrden=$scope.disponibilidad.FECHAORDEN;
+                      $scope.solicitudAvance.Estadosolicitud.FechaCertificacion=$scope.disponibilidad.FECHAPAGO;
+                    }
+                });
+
+
+
+
             }
         });   
-        /******Busca el certificado de disponibilidad relacionado a la necesidad******/
-        $http.get('models/ordenpago.json')
-         .then(function(responseOP){
-          //alert(JSON.stringify(responseOP))
-          $scope.disponibilidad= $filter('filter')(responseOP.data, {"Vigencia" : $scope.solicitudAvance.Solicitud.Vigencia,"Disponibilidad":$scope.solicitudAvance.Presupuesto.Disponibilidad.toString()},true)[0];
-          if (!$scope.disponibilidad) {
-              $scope.solicitudAvance.Presupuesto.Registro="";
-              $scope.solicitudAvance.Presupuesto.OrdenPago="";
-            }else{
-              $scope.solicitudAvance.Presupuesto.Registro=$scope.disponibilidad.Registro;
-              $scope.solicitudAvance.Presupuesto.ValorRegistro=$scope.disponibilidad.ValorRegistro;
-              $scope.solicitudAvance.Presupuesto.FechaRegistro=$scope.disponibilidad.FechaRegistro;
-              $scope.solicitudAvance.Presupuesto.Compromiso=$scope.disponibilidad.Compromiso;              
-              $scope.solicitudAvance.Presupuesto.OrdenPago=$scope.disponibilidad.OrdenPago;
-              $scope.solicitudAvance.Presupuesto.ValorOrden=$scope.disponibilidad.ValorOrden;
-              $scope.solicitudAvance.Presupuesto.FechaOrden=$scope.disponibilidad.FechaOrden;
-              $scope.solicitudAvance.Estadosolicitud.FechaCertificacion=$scope.disponibilidad.FechaPago;
-            }
-          });
   });
 
   

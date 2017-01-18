@@ -4,8 +4,9 @@ var hostSolicitudAvance = host+'/tesoreria/solicitudavance';
 var hostTipoAvance = host+'/tesoreria/tipoavance';
 //var idReqFind;
 var vigencia;
+var vigenciaActual;
 var fecha = new Date();
-vigencia=fecha.getFullYear();
+vigenciaActual=fecha.getFullYear();
 
 var idSolicitud;
 // Configuración de las rutas
@@ -16,12 +17,26 @@ nixApp.controller('SolicitudAvanceController', function($scope, $http, $routePar
   $scope.title = 'Solicitud de Avance';
   $scope.message = 'Listado de Solicitudes de Avance';
  
+  vigencia=vigenciaActual;
+  $scope.vigencias=[{vig:(vigencia-1)},{vig:vigencia}];
+
 //busca datos del tipo de avance
  $http.get(hostSolicitudAvance+'/lista/'+vigencia)
   .then(function(response) {
      //alert(JSON.stringify(response))
       $scope.data = response.data;
   });
+
+  $scope.selectVigencia = function(vige){
+  //alert('hola'+vige);
+      $scope.solicitud='';
+      $http.get(hostSolicitudAvance+'/lista/'+vige)
+        .then(function(response) {
+           //alert(JSON.stringify(response))
+            $scope.data = response.data;
+        });
+  }
+
 
 });
 /*******Funcion registrar solicitud********/

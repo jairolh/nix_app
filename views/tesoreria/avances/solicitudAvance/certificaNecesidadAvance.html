@@ -15,7 +15,7 @@
           <div class="form-group">
            <label for="NumeroNecesidad" class="col-sm-2 control-label">Necesidad:</label>
            <div class="col-sm-4">
-             <input name="NumeroNecesidad" type="text" ng-model="solicitudAvance.Presupuesto.NumeroNecesidad" class="form-control" min="0" ng-keypress="($event.which === 13)?necesidad():0" ng-required="true" ng-pattern="/^[0-9]{1,100}$/" ng-disabled="solicitudAvance.Presupuesto.Guardado == 'S'" />
+             <input name="NumeroNecesidad" type="text" ng-model="solicitudAvance.Presupuesto.NumeroNecesidad" class="form-control" min="0" ng-keypress="($event.which === 13)?necesidad(solicitudAvance.Presupuesto.NumeroNecesidad):0" ng-required="true" ng-pattern="/^[0-9]{1,100}$/" ng-disabled="solicitudAvance.Presupuesto.Guardado == 'S'" />
              
              <span class="messages" style="color:red" ng-show="necesidadAvanceForm.$submitted || necesidadAvanceForm.NumeroNecesidad.$untouched  || necesidadAvanceForm.NumeroNecesidad.$touched">
                     <span ng-show="necesidadAvanceForm.NumeroNecesidad.$error.required">Ingrese el Número de Necesidad y oprima la tecla Enter!</span>

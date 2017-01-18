@@ -4,8 +4,9 @@ var hostLegalizarAvance = host+'/tesoreria/legalizaravance';
 var hostTipoAvance = host+'/tesoreria/tipoavance';
 //var idReqFind;
 var vigencia;
+var vigenciaActual;
 var fecha = new Date();
-vigencia=fecha.getFullYear();
+vigenciaActual=fecha.getFullYear();
 
 var idSolicitud;
 // Configuración de las rutas
@@ -16,6 +17,9 @@ nixApp.controller('LegalizaAvanceController', function($scope, $http, $routePara
   $scope.title = 'Legalización de Avance';
   $scope.message = 'Listado de Avances';
   
+  vigencia=vigenciaActual;
+  $scope.vigencias=[{vig:(vigencia-1)},{vig:vigencia}]; 
+
   $scope.hoy=$filter('date')(new Date(), "yyyy-MM-dd");
   //busca datos del tipo de avance
    $http.get(hostLegalizarAvance+'/lista/'+vigencia)
@@ -24,6 +28,17 @@ nixApp.controller('LegalizaAvanceController', function($scope, $http, $routePara
         var avance=$filter('filter')(response.data, {"EstadoActual":"Girado"});
         $scope.solicitud=avance;
     });
+
+  $scope.selectVigencia = function(vige){
+  //alert('hola'+vige);
+      $scope.solicitud='';
+      $http.get(hostLegalizarAvance+'/lista/'+vige)
+        .then(function(response) {
+           //alert(JSON.stringify(response))
+          var avance=$filter('filter')(response.data, {"EstadoActual":"Girado"});
+          $scope.solicitud=avance;
+        });
+  }
 
     $scope.fechaLegalizar = function(fecha){
         //alert(fecha)

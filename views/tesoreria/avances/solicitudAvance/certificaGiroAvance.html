@@ -55,14 +55,14 @@
            <div class="col-sm-4">
              <input name="ValorOrden" type="text" ng-model="solicitudAvance.Presupuesto.ValorOrden | currency" class="form-control" min="0" ng-disabled="true" />
            </div>
-           <label for="FechaCertificacion" class="col-sm-2 control-label">Fecha Certificacion del Giro:</label>
+           <label for="FechaCertificacion" class="col-sm-2 control-label">Fecha Certificacion Evento:</label>
            <div class="col-sm-4">
               <span class="input-group-addon">
                 <input name="FechaCertificacion"  type="text"  ng-model="solicitudAvance.Presupuesto.FechaCertificacion" readonly="true" ng-required="true"/>
                 <i id="datepicker"  data-ng-datepicker class="glyphicon glyphicon-calendar"></i> 
               </span>
               <span class="messages" style="color:red" ng-show="giroAvanceForm.$submitted || giroAvanceForm.FechaCertificacion.$touched || giroAvanceForm.FechaCertificacion.$untouched " >
-                  <span ng-show="giroAvanceForm.FechaCertificacion.$error.required">Debe Ingresar la fecha de Certificación del Giro!</span>
+                  <span ng-show="giroAvanceForm.FechaCertificacion.$error.required">Debe Ingresar la fecha de Realización del Evento!</span>
               </span>
            </div>
          </div>
