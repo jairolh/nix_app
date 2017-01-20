@@ -11,20 +11,14 @@
   <div ng-controller="addSolicitudAvanceController" class="container">
      <form name="solicitudavanceForm" class="form-horizontal">    
      <div class="container">
-         <p align="left"> <u>Beneficiario </u> </p>
-         <div class="form-group">
-           <label for="IdBeneficiario" class="col-sm-2 control-label"> Tercero:</label>
-           <div class="col-sm-10">
-            <select name="IdBeneficiario" ng-model="solicitudAvance.Beneficiario.IdBeneficiario" class="form-control" ng-change="selectBeneficiario(solicitudAvance.Beneficiario.IdBeneficiario)" >
-              <option ng-repeat="ben in terceros" value={{ben.id}} >{{ben.documento}} - {{ben.nombres}} {{ben.apellidos}}</option>
-            </select>
-           </div>
-         </div>  
-
          <div class="form-group">
            <label for="Documento" class="col-sm-2 control-label">Documento:</label>
            <div class="col-sm-10">
-             <input name="Documento" type="text" ng-model="solicitudAvance.Beneficiario.Documento" ng-disabled="true" class="form-control" />
+             <input name="Documento" type="text" ng-model="solicitudAvance.Beneficiario.Documento"  class="form-control" min="0" ng-keypress="($event.which === 13)?selectBeneficiario(solicitudAvance.Beneficiario.Documento):0" ng-required="true" ng-pattern="/^[0-9]{4,50}$/"/>
+             <span class="messages" style="color:red" ng-show="solicitudavanceForm.$submitted || solicitudavanceForm.Documento.$untouched  || solicitudavanceForm.Documento.$touched">
+                    <span ng-show="solicitudavanceForm.Documento.$error.required">Ingrese el Número de Identificación y oprima la tecla Enter!</span>
+                    <span ng-show="solicitudavanceForm.Documento.$error.pattern">Ingrese un número de Identificación valido!!</span>
+             </span>
            </div>
          </div>
          <div class="form-group">
@@ -35,13 +29,12 @@
          </div>
          <div class="form-group">
            <label for="LugarDocumento" class="col-sm-2 control-label">Lugar del Documento:</label>
-           <div class="col-sm-10">
-            <select name="LugarDocumento" ng-model="solicitudAvance.Beneficiario.LugarDocumento" class="form-control">
-              <option ng-repeat="mun in municipios" value="{{mun.Municipio}} - {{mun.Departamento}}">{{mun.Municipio}} - {{mun.Departamento}}</option>
+           <div class="col-sm-10" >
+            <select name="LugarDocumento" ng-model="solicitudAvance.Beneficiario.LugarDocumento" class="form-control" >
+              <option ng-repeat="mun in municipios" value="{{mun.Municipio}} - {{mun.Departamento}}" ng-disabled="!solicitudAvance.Beneficiario.IdBeneficiario">{{mun.Municipio}} - {{mun.Departamento}}</option>
             </select>
            </div>
          </div> 
-
          <div class="form-group">
            <label for="Nombre" class="col-sm-2 control-label">Nombre:</label>
            <div class="col-sm-10">
@@ -57,33 +50,37 @@
          <div class="form-group">
            <label for="Direccion" class="col-sm-2 control-label">Dirección:</label>
            <div class="col-sm-10">
-             <input name="Direccion" type="text" ng-model="solicitudAvance.Beneficiario.Direccion" class="form-control" />
+             <input name="Direccion" type="text" ng-model="solicitudAvance.Beneficiario.Direccion" class="form-control" ng-required="true" ng-pattern="{6,200}$/" ng-disabled="!solicitudAvance.Beneficiario.IdBeneficiario"/>
+             <span class="messages" style="color:red" ng-show="solicitudavanceForm.$submitted || solicitudavanceForm.Direccion.$untouched  || solicitudavanceForm.Direccion.$touched">
+                    <span ng-show="solicitudavanceForm.Direccion.$error.required">Ingrese la direccion de residencia!</span>
+                    <span ng-show="solicitudavanceForm.Direccion.$error.pattern">Ingrese una direccion de residencia valida!!</span>
+             </span>
            </div>
          </div>
          <div class="form-group">
            <label for="Correo" class="col-sm-2 control-label">Correo Electrónico:</label>
            <div class="col-sm-10">
-             <input name="Correo" type="email" ng-model="solicitudAvance.Beneficiario.Correo" class="form-control" placeholder="example@email.com" />
-             <span class="messages" ng-show="solicitudavanceForm.$submitted || solicitudavanceForm.Correo.$touched">
-                    <span ng-show="solicitudavanceForm.Correo.$error.required">Por favor ingresar el correo electrónico, es requerido!</span>
-                    <span ng-show="solicitudavanceForm.Correo.$error.email">Por favor ingresar un correo electrónico Valido!!</span>
+             <input name="Correo" type="email" ng-model="solicitudAvance.Beneficiario.Correo" class="form-control" ng-required="true"  placeholder="example@email.com" ng-disabled="!solicitudAvance.Beneficiario.IdBeneficiario"/>
+              <span class="messages" style="color:red" ng-show="solicitudavanceForm.$submitted || solicitudavanceForm.Correo.$untouched  || solicitudavanceForm.Correo.$touched">
+                    <span ng-show="solicitudavanceForm.Correo.$error.required">Ingrese un correo electrónico!</span>
+                    <span ng-show="solicitudavanceForm.Correo.$error.email">Ingrese un correo electrónico Valido!!</span>
              </span>
           </div>
          </div>
          <div class="form-group">
            <label for="Telefono" class="col-sm-2 control-label">Número Telefono:</label>
            <div class="col-sm-10">
-             <input name="Telefono" type="text" ng-model="solicitudAvance.Beneficiario.Telefono" class="form-control" ng-pattern="/^[0-9]{1,7}$/" />
-             <span class="messages" ng-show="solicitudavanceForm.$submitted || solicitudavanceForm.Telefono.$touched">
-                    <span ng-show="solicitudavanceForm.Telefono.$error.required">Por favor ingresar un número de telefono, es requerido!</span>
-                    <span ng-show="solicitudavanceForm.Telefono.$error.pattern">Por favor ingresar un telefono Valido!!</span>
+             <input name="Telefono" type="text" ng-model="solicitudAvance.Beneficiario.Telefono" class="form-control" ng-pattern="/^[0-9]{1,7}$/" ng-required="true"  ng-disabled="!solicitudAvance.Beneficiario.IdBeneficiario"/>
+             <span class="messages" style="color:red" ng-show="solicitudavanceForm.$submitted || solicitudavanceForm.Telefono.$untouched  || solicitudavanceForm.Telefono.$touched">
+                    <span ng-show="solicitudavanceForm.Telefono.$error.required">Ingrese un número de telefono de contacto!</span>
+                    <span ng-show="solicitudavanceForm.Telefono.$error.pattern">Ingrese un telefono Valido!!</span>
              </span>
            </div>
          </div>
          <div class="form-group">
            <label for="Celular" class="col-sm-2 control-label">Número Celular:</label>
            <div class="col-sm-10">
-             <input name="Celular" type="text" ng-model="solicitudAvance.Beneficiario.Celular" class="form-control"/>
+             <input name="Celular" type="text" ng-model="solicitudAvance.Beneficiario.Celular" class="form-control" ng-disabled="!solicitudAvance.Beneficiario.IdBeneficiario"/>
          </div>
      </div>     
      <div class="container">
@@ -197,6 +194,7 @@
        <div class="col-sm-offset-2 col-sm-10">
           <input name="Vigencia" type="hidden" ng-model="solicitudAvance.Solicitud.Vigencia"/>
           <input name="Consecutivo" type="hidden" ng-model="solicitudAvance.Solicitud.Consecutivo"/>
+          <input name="IdBeneficiario" type="hidden" ng-model="solicitudAvance.Beneficiario.IdBeneficiario"/>
           <input name="Usuario" type="hidden" ng-model="solicitudAvance.Estadosolicitud.Usuario" />
           <input type="submit" ng-click="add()" value="Guardar" class="btn btn-primary"/>    
           <input type="reset"  ng-click="reset()" value="Limpiar" class="btn btn-default"/>

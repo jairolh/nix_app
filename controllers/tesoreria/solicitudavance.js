@@ -2,6 +2,7 @@
 //var nixApp = angular.module('nixApp', ['ngRoute']);
 var hostSolicitudAvance = host+'/tesoreria/solicitudavance';
 var hostTipoAvance = host+'/tesoreria/tipoavance';
+var hostServiceSic = hostSicapital+'/sicws/ws/sicapitalAPI.php/?'
 //var idReqFind;
 var vigencia;
 var vigenciaActual;
@@ -43,32 +44,36 @@ nixApp.controller('SolicitudAvanceController', function($scope, $http, $routePar
 nixApp.controller('addSolicitudAvanceController', function($scope, $http,$filter) {
   $scope.title = 'Solicitud de Avance';
   $scope.message = 'Registrar Solicitud de Avance';
-
-$http.get('models/terceros.json')
-       .then(function(response){
-        //alert(JSON.stringify(response))
-        $scope.terceros = response.data;
-        });
+  vigencia=vigenciaActual;
 
 //busca los datos de tercero 
-$scope.selectBeneficiario = function(idBen) {  
-  beneficiario=$filter('filter')($scope.terceros, {"id" : idBen})[0];
-  $scope.solicitudAvance.Beneficiario = { 
-              IdBeneficiario: beneficiario.id,
-              Documento :beneficiario.documento,
-              TipoDocumento :beneficiario.tipodocumento,
-              LugarDocumento :beneficiario.lugardocumento,
-              Nombre: beneficiario.nombres,
-              Apellido: beneficiario.apellidos,
-              Direccion: beneficiario.direccion,
-              Correo: beneficiario.correo,
-              Telefono: beneficiario.telefono,
-              Celular: beneficiario.celular,
-            };
-  $scope.solicitudAvance.Solicitud= {Vigencia : vigencia};   
-  $scope.solicitudAvance.Estadosolicitud= {Usuario : 'system'};
-
+$scope.selectBeneficiario = function(Ben) {  
+          $http.get(hostServiceSic+'/tercero/sel/'+Ben)
+           .then(function(responseBen){
+            //alert(JSON.stringify(responseBen))
+            beneficiario=responseBen.data;
+            if (!Array.isArray(beneficiario)){
+                  $scope.solicitudAvance.Beneficiario='';
+                  alert("No existe el Tercero!")}
+            else{ 
+                  $scope.solicitudAvance.Beneficiario = { 
+                                                          IdBeneficiario: beneficiario[0].ID,
+                                                          Documento :beneficiario[0].IDENTIFICACION,
+                                                          TipoDocumento :beneficiario[0].TIPOIDENTIFICACION,
+                                                          LugarDocumento :beneficiario[0].LUGARDOCUMENTO,
+                                                          Nombre: beneficiario[0].NOMBRES,
+                                                          Apellido: beneficiario[0].APELLIDOS,
+                                                          Direccion: beneficiario[0].DIRECCION,
+                                                          Correo: beneficiario[0].CORREO,
+                                                          Telefono: beneficiario[0].TELEFONO,
+                                                          Celular: beneficiario[0].CELULAR,
+                                                        };
+                  $scope.solicitudAvance.Solicitud= {Vigencia : vigencia};   
+                  $scope.solicitudAvance.Estadosolicitud= {Usuario : 'system'};
+                }  
+     });
   };
+
 
 $http.get('models/municipios.json')
   .then(function(responseMun){
